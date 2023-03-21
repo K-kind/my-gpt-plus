@@ -1,8 +1,9 @@
+import { AssignableModel } from "@/features/chats/types/chat";
 import { functions } from "@/shared/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 
 type CreateChatCompletionParams = {
-  model: "gpt-3.5-turbo" | "gpt-4";
+  model: AssignableModel;
   messages: { role: "user" | "system" | "assistant"; content: string }[];
 };
 
@@ -36,7 +37,9 @@ export const createChatCompletion = async ({
     CreateChatCompletionParams,
     CreateChatCompletionResponse
   >(functions, "createChatCompletion");
-  const { data } = await doCreateChatCompletion(params);
+  const {
+    data: { data },
+  } = await doCreateChatCompletion(params);
 
-  return data;
+  return { data };
 };
