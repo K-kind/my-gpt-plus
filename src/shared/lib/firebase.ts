@@ -18,4 +18,6 @@ export const auth = getAuth(app);
 export const functions = getFunctions(app, "asia-northeast1");
 export const db = getFirestore(app);
 
-// connectFunctionsEmulator(functions, "localhost", 5001);
+if (process.env.NEXT_PUBLIC_USE_FUNCTION_EMULATOR === "true") {
+  connectFunctionsEmulator(functions, "localhost", 5001);
+}
