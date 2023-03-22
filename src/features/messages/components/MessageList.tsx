@@ -1,21 +1,26 @@
-import { useMessageListByChatId } from "@/features/messages/hooks/useMessageList";
-import { Chat } from "@/features/chats/types/chat";
+import { Message } from "@/features/chats/types/message";
 
 type Props = {
-  chat: Chat;
+  messages: Message[];
   loadingNewMessage: boolean;
 };
 
-export const MessageList = ({ chat, loadingNewMessage }: Props) => {
-  const messageListByChatIdQuery = useMessageListByChatId({
-    chatId: chat.id,
-  });
-  const messages = messageListByChatIdQuery.data!;
-
+export const MessageList = ({ messages, loadingNewMessage }: Props) => {
   return (
     <div>
       {messages.map((message) => (
-        <div key={message.id}>{JSON.stringify(message)}</div>
+        <div key={message.id} style={{ whiteSpace: "pre-line" }}>
+          {JSON.stringify(
+            {
+              id: message.id,
+              role: message.role,
+              content: message.content,
+              createdAt: message.createdAt,
+            },
+            null,
+            2
+          )}
+        </div>
       ))}
       {loadingNewMessage ? <p>ロード中...</p> : null}
     </div>
