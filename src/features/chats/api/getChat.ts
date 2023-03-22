@@ -8,13 +8,14 @@ export type ChatRawData = {
   model: AssignableModel;
   systemContent: string | null;
   title: string;
-  createdAt: Timestamp;
+  /** 作成直後はnullの場合がある */
+  createdAt: Timestamp | null;
 };
 
 export const parseRawChat = (rawData: ChatRawData): Chat => {
   return {
     ...rawData,
-    createdAt: rawData.createdAt.toDate(),
+    createdAt: rawData.createdAt?.toDate() ?? new Date(),
   };
 };
 

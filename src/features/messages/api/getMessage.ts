@@ -7,7 +7,8 @@ export type UserMessageRawData = {
   chatId: string;
   role: "user";
   content: string;
-  createdAt: Timestamp;
+  /** 作成直後はnullの場合がある */
+  createdAt: Timestamp | null;
 };
 
 export type AssistantMessageRawData = {
@@ -21,7 +22,8 @@ export type AssistantMessageRawData = {
   totalTokens: number;
   idFromOpenAI: string;
   model: string;
-  createdAt: Timestamp;
+  /** 作成直後はnullの場合がある */
+  createdAt: Timestamp | null;
 };
 
 export type MessageRawData = UserMessageRawData | AssistantMessageRawData;
@@ -29,7 +31,7 @@ export type MessageRawData = UserMessageRawData | AssistantMessageRawData;
 export const parseRawMessage = (rawData: MessageRawData): Message => {
   return {
     ...rawData,
-    createdAt: rawData.createdAt.toDate(),
+    createdAt: rawData.createdAt?.toDate() ?? new Date(),
   };
 };
 

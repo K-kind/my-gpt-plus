@@ -12,7 +12,11 @@ export const useCreateUserMessage = () => {
     onSuccess: (message) => {
       queryClient.setQueryData<Message[]>(
         messageListByChatIdQueryKey(message.chatId),
-        (messages) => (messages ? [...messages, message] : [message])
+        (messages) => {
+          if (messages == undefined) return [message];
+          if (messages.some(({ id }) => id === message.id)) return messages;
+          return [...messages, message];
+        }
       );
     },
   });
