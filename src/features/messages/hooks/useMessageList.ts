@@ -13,6 +13,7 @@ export const messageListByChatIdQueryKey = (chatId: string) => [
   "chats",
   chatId,
   "messages",
+  "index",
 ];
 
 export const useMessageListByChatId = ({ chatId, config }: ByChatIdOptions) => {

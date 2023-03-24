@@ -4,18 +4,25 @@ import { useCreateChat } from "@/features/chats/hooks/useCreateChat";
 import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
 import { Button, Textarea } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 type Props = {};
 
 export const NewChatPage = ({}: Props) => {
+  const router = useRouter();
   const [content, setContent] = useState("");
+  const [chat, setChat] = useState<Chat | null>(null);
 
   const createChatMutation = useCreateChat();
   const createUserMessageMutation = useCreateUserMessage();
   const createAssistantMessageMutation = useCreateAssistantMessage();
 
-  const [chat, setChat] = useState<Chat | null>(null);
+  useEffect(() => {
+    if (router.query.id == undefined) {
+      setChat(null);
+    }
+  }, [router.query]);
 
   const handleSubmit = async () => {
     const newChat = await createChatMutation.mutateAsync({
@@ -25,6 +32,8 @@ export const NewChatPage = ({}: Props) => {
       initialContent: content,
     });
     setChat(newChat);
+    setContent("");
+    router.push(`?id=${newChat.id}`);
 
     const userMessage = await createUserMessageMutation.mutateAsync({
       chatId: newChat.id,

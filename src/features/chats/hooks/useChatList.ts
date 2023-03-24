@@ -8,14 +8,15 @@ type Options = GetChatListDTO & {
   config?: QueryConfig<QueryFnType>;
 };
 
-export const chatQueryKey = (options: GetChatListDTO = {}) => [
+export const chatListQueryKey = (options: GetChatListDTO = {}) => [
   "chats",
+  "index",
   { options },
 ];
 
 export const useChatList = ({ sort, perPage, config }: Options = {}) => {
   return useQuery<ExtractFnReturnType<QueryFnType>>({
-    queryKey: chatQueryKey({ sort, perPage }),
+    queryKey: chatListQueryKey({ sort, perPage }),
     queryFn: () => getChatList({ sort, perPage }),
     ...config,
   });
