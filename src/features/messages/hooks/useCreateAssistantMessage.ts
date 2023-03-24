@@ -17,7 +17,7 @@ const createAssistantMessage = async (params: CreateAssistantMessageParams) => {
     params: {
       chatId: params.chatId,
       role: "assistant",
-      content: data.choices[0].message.content,
+      content: data.choices[0].message.content.trim(),
       finishReason: data.choices[0].finish_reason,
       completionTokens: data.usage?.completion_tokens!,
       promptTokens: data.usage?.prompt_tokens!,

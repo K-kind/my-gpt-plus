@@ -1,6 +1,6 @@
 import { AppNavbar } from "@/shared/components/AppNavbar";
 import { ContentLoader } from "@/shared/components/ContentLoader";
-import { AppShell, Container } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { ReactNode, Suspense } from "react";
 
 type Props = {
@@ -9,10 +9,8 @@ type Props = {
 
 export const AppLayout = ({ children }: Props) => {
   return (
-    <AppShell navbar={<AppNavbar />}>
-      <Suspense fallback={<ContentLoader />}>
-        <Container size="xl">{children}</Container>
-      </Suspense>
+    <AppShell navbar={<AppNavbar />} padding={0}>
+      <Suspense fallback={<ContentLoader />}>{children}</Suspense>
     </AppShell>
   );
 };
