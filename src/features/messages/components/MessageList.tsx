@@ -1,5 +1,7 @@
 import { Message } from "@/features/chats/types/message";
 import { MessageItem } from "@/features/messages/components/MessageItem";
+import { RandomLoader } from "@/shared/components/loaders/RandomLoader";
+import { Flex } from "@mantine/core";
 
 type Props = {
   messages: Message[];
@@ -12,7 +14,11 @@ export const MessageList = ({ messages, loadingNewMessage }: Props) => {
       {messages.map((message) => (
         <MessageItem key={message.id} message={message} />
       ))}
-      {loadingNewMessage ? <p>ロード中...</p> : null}
+      {loadingNewMessage && (
+        <Flex justify="center" py="sm">
+          <RandomLoader />
+        </Flex>
+      )}
     </div>
   );
 };
