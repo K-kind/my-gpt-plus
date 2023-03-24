@@ -1,4 +1,5 @@
 import { Message } from "@/features/chats/types/message";
+import { MarkdownRenderer } from "@/shared/components/MarkdownRenderer";
 import { Avatar, Box, Container, Flex } from "@mantine/core";
 import { IconRobot, IconUser } from "@tabler/icons-react";
 import { useMemo } from "react";
@@ -18,8 +19,8 @@ export const MessageItem = ({ message }: Props) => {
       <Container py="md" size="sm">
         <Flex gap="md">
           <Avatar radius="xl">{isUser ? <IconUser /> : <IconRobot />}</Avatar>
-          <Box sx={{ whiteSpace: "pre-line" }} py={4}>
-            {message.content}
+          <Box py={4} sx={{ flex: 1, width: "calc(100% - 54px)" }}>
+            <MarkdownRenderer>{message.content}</MarkdownRenderer>
           </Box>
         </Flex>
       </Container>
