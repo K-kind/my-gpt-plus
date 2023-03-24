@@ -15,7 +15,7 @@ export const MessageList = ({ messages, loadingNewMessage }: Props) => {
         <MessageItem key={message.id} message={message} />
       ))}
       {loadingNewMessage && (
-        <Flex justify="center" py="sm">
+        <Flex justify="center" py="xs" bg="gray.2">
           <RandomLoader />
         </Flex>
       )}

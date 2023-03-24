@@ -33,6 +33,7 @@ export const NewChatPage = ({}: Props) => {
     });
     setChat(newChat);
     setContent("");
+
     router.push(`?id=${newChat.id}`);
 
     const userMessage = await createUserMessageMutation.mutateAsync({
@@ -45,6 +46,9 @@ export const NewChatPage = ({}: Props) => {
       model: newChat.model,
       messages: [{ role: userMessage.role, content: userMessage.content }],
     });
+
+    // ?id=のままだとリロード時におかしな挙動になるため、URLだけ密かに変える
+    history.replaceState(undefined, "", `/chats/${newChat.id}`);
   };
 
   if (chat) {
