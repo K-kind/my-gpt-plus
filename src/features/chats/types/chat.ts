@@ -14,3 +14,14 @@ export type Chat = {
   title: string;
   createdAt: Date;
 };
+
+export const MODEL_INFO = {
+  [ASSIGNABLE_MODEL.THREE_TURBO]: {
+    name: "GPT-3.5",
+  },
+  [ASSIGNABLE_MODEL.FOUR]: {
+    name: "GPT-4",
+  },
+} as const satisfies {
+  [key in AssignableModel]: { name: string };
+};

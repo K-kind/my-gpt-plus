@@ -1,10 +1,11 @@
 import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAssistantMessage";
 import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
-import { Button, Textarea } from "@mantine/core";
+import { Button, Flex, Textarea } from "@mantine/core";
 import { useState } from "react";
 import { MessageList } from "@/features/messages/components/MessageList";
 import { useMessageListByChatId } from "@/features/messages/hooks/useMessageList";
+import { getModelInfo } from "@/features/chats/models/chat";
 
 type Props = {
   chat: Chat;
@@ -44,6 +45,9 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
 
   return (
     <div>
+      <Flex justify="center" align="center">
+        モデル: {getModelInfo(chat).name}
+      </Flex>
       <MessageList
         messages={messageListByChatIdQuery.data!}
         loadingNewMessage={
