@@ -18,6 +18,8 @@ export const NavChatList = ({ pageId }: Props) => {
           active={pageId === chat.id}
           href={`/chats/${chat.id}`}
           icon={<IconMessageDots size="1rem" stroke={1.5} />}
+          sx={{ borderRadius: 6 }}
+          my={6}
         />
       ))}
     </>
