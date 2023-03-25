@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
     height: "100%",
     // backgroundColor: "#1d2630",
-    backgroundColor: "white",
+    backgroundColor: "#e9ecef",
     borderRadius: "50%",
   },
 }));

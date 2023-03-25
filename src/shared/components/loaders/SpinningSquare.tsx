@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
   "configure-core": {
     width: "100%",
     height: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#e9ecef",
     // backgroundColor: "#1d2630",
   },
 }));
