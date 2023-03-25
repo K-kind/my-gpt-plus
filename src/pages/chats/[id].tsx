@@ -5,7 +5,7 @@ import { AppLayout } from "@/shared/components/AppLayout";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
-const ChatsIdPage: NextPageWithLayout = () => {
+const PagesChatsId: NextPageWithLayout = () => {
   const router = useRouter();
 
   return (
@@ -16,8 +16,8 @@ const ChatsIdPage: NextPageWithLayout = () => {
   );
 };
 
-ChatsIdPage.getLayout = (page: ReactElement) => {
+PagesChatsId.getLayout = (page: ReactElement) => {
   return <AppLayout>{page}</AppLayout>;
 };
 
-export default ChatsIdPage;
+export default PagesChatsId;

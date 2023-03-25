@@ -4,7 +4,7 @@ import { AppHead } from "@/shared/components/AppHead";
 import { AppLayout } from "@/shared/components/AppLayout";
 import { ReactElement } from "react";
 
-const ChatsNewPage: NextPageWithLayout = () => {
+const PagesChatsNew: NextPageWithLayout = () => {
   return (
     <>
       <AppHead />
@@ -13,8 +13,8 @@ const ChatsNewPage: NextPageWithLayout = () => {
   );
 };
 
-ChatsNewPage.getLayout = (page: ReactElement) => {
+PagesChatsNew.getLayout = (page: ReactElement) => {
   return <AppLayout>{page}</AppLayout>;
 };
 
-export default ChatsNewPage;
+export default PagesChatsNew;
