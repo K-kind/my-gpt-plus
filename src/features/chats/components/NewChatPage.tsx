@@ -3,15 +3,15 @@ import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAs
 import { useCreateChat } from "@/features/chats/hooks/useCreateChat";
 import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
-import { Button, Textarea } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Box } from "@mantine/core";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
 
 type Props = {};
 
 export const NewChatPage = ({}: Props) => {
   const router = useRouter();
-  const [content, setContent] = useState("");
   const [chat, setChat] = useState<Chat | null>(null);
 
   const createChatMutation = useCreateChat();
@@ -24,32 +24,40 @@ export const NewChatPage = ({}: Props) => {
     }
   }, [router.query]);
 
-  const handleSubmit = async () => {
-    const newChat = await createChatMutation.mutateAsync({
-      userId: "sample",
-      model: "gpt-3.5-turbo",
-      systemContent: null,
-      initialContent: content,
-    });
-    setChat(newChat);
-    setContent("");
+  const handleSubmit = useCallback(
+    async (content: string, setContent: (content: string) => void) => {
+      const newChat = await createChatMutation.mutateAsync({
+        userId: "sample",
+        model: "gpt-3.5-turbo",
+        systemContent: null,
+        initialContent: content,
+      });
+      setChat(newChat);
+      setContent("");
 
-    router.push(`?id=${newChat.id}`);
+      router.push(`?id=${newChat.id}`);
 
-    const userMessage = await createUserMessageMutation.mutateAsync({
-      chatId: newChat.id,
-      content,
-    });
+      const userMessage = await createUserMessageMutation.mutateAsync({
+        chatId: newChat.id,
+        content,
+      });
 
-    await createAssistantMessageMutation.mutateAsync({
-      chatId: newChat.id,
-      model: newChat.model,
-      messages: [{ role: userMessage.role, content: userMessage.content }],
-    });
+      await createAssistantMessageMutation.mutateAsync({
+        chatId: newChat.id,
+        model: newChat.model,
+        messages: [{ role: userMessage.role, content: userMessage.content }],
+      });
 
-    // ?id=のままだとリロード時におかしな挙動になるため、URLだけ密かに変える
-    history.replaceState(undefined, "", `/chats/${newChat.id}`);
-  };
+      // ?id=のままだとリロード時におかしな挙動になるため、URLだけ密かに変える
+      history.replaceState(undefined, "", `/chats/${newChat.id}`);
+    },
+    [
+      createAssistantMessageMutation,
+      createChatMutation,
+      createUserMessageMutation,
+      router,
+    ]
+  );
 
   if (chat) {
     return (
@@ -60,13 +68,14 @@ export const NewChatPage = ({}: Props) => {
     );
   } else {
     return (
-      <div>
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <Button onClick={handleSubmit}>送信</Button>
-      </div>
+      <Box sx={{ position: "relative" }} h="100%">
+        {/* <Box p="sm">
+          <NewMessageForm handleSubmit={handleSubmit} />
+        </Box> */}
+        <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" pb="xl">
+          <NewMessageForm handleSubmit={handleSubmit} />
+        </Box>
+      </Box>
     );
   }
 };
