@@ -16,7 +16,7 @@ export const MessageItem = ({ message }: Props) => {
       sx={(theme) => ({ borderBottom: `1px solid ${theme.colors.gray[4]}` })}
       bg={isUser ? "white" : "gray.2"}
     >
-      <Container py="md" size="sm">
+      <Container py="md">
         <Flex gap="md">
           <Avatar radius="xl">{isUser ? <IconUser /> : <IconRobot />}</Avatar>
           <Box py={4} sx={{ flex: 1, width: "calc(100% - 54px)" }}>

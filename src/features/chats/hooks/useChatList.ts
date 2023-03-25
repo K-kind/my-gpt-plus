@@ -14,10 +14,10 @@ export const chatListQueryKey = (options: GetChatListDTO = {}) => [
   { options },
 ];
 
-export const useChatList = ({ sort, perPage, config }: Options = {}) => {
+export const useChatList = ({ config, ...options }: Options = {}) => {
   return useQuery<ExtractFnReturnType<QueryFnType>>({
-    queryKey: chatListQueryKey({ sort, perPage }),
-    queryFn: () => getChatList({ sort, perPage }),
+    queryKey: chatListQueryKey(options),
+    queryFn: () => getChatList(options),
     ...config,
   });
 };
