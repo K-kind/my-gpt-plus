@@ -1,7 +1,8 @@
+import { ChatDeleteButton } from "@/features/chats/components/ChatDeleteButton";
 import { Chat, MODEL_INFO } from "@/features/chats/types/chat";
 import { format } from "@/shared/utils/date";
-import { ActionIcon, Box, Flex, Table, Text } from "@mantine/core";
-import { IconArrowDown, IconArrowUp, IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Box, Flex, Table } from "@mantine/core";
+import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import Link from "next/link";
 
 type Props = {
@@ -60,9 +61,7 @@ export const ChatListTable = ({ chats, sort, toggleSort, loading }: Props) => {
             <td>{MODEL_INFO[chat.model].name}</td>
             <td>{format(chat.createdAt, "yyyy/MM/dd hh:mm")}</td>
             <td>
-              <ActionIcon>
-                <IconTrash size="1.125rem" color="red" />
-              </ActionIcon>
+              <ChatDeleteButton id={chat.id} />
             </td>
           </tr>
         ))}
