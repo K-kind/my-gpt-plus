@@ -1,10 +1,9 @@
+import { APP_NAME } from "@/shared/contants";
 import Head from "next/head";
 
 type Props = {
   title?: string;
 };
-
-const APP_NAME = "My Own GPT";
 
 export const AppHead = ({ title }: Props) => {
   const appTitle = `${APP_NAME}${title ? ` | ${title}` : ""}`;

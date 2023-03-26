@@ -1,5 +1,6 @@
 import { useSetAuth } from "@/features/auth/hooks/useSetAuth";
 import { ContentLoader } from "@/shared/components/ContentLoader";
+import { APP_NAME } from "@/shared/contants";
 import { AppShell, Container, Flex, Header, Text } from "@mantine/core";
 import Link from "next/link";
 import { ReactNode, Suspense } from "react";
@@ -17,7 +18,7 @@ export const SimpleLayout = ({ children }: Props) => {
           <Container>
             <Flex align="center" h={50}>
               <Text component={Link} fz="xl" href="/">
-                My Own GPT
+                {APP_NAME}
               </Text>
             </Flex>
           </Container>
