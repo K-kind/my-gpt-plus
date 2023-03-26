@@ -3,10 +3,12 @@ import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAs
 import { useCreateChat } from "@/features/chats/hooks/useCreateChat";
 import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
-import { Box } from "@mantine/core";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
+import {
+  HandleSubmitParams,
+  NewChatForm,
+} from "@/features/chats/components/NewChatForm";
 
 type Props = {};
 
@@ -25,10 +27,10 @@ export const NewChatPage = ({}: Props) => {
   }, [router.query]);
 
   const handleSubmit = useCallback(
-    async (content: string, setContent: (content: string) => void) => {
+    async ({ model, prompts, content, setContent }: HandleSubmitParams) => {
       const newChat = await createChatMutation.mutateAsync({
-        model: "gpt-3.5-turbo",
-        systemContent: null,
+        model,
+        prompts,
         initialContent: content,
       });
       setChat(newChat);
@@ -41,10 +43,17 @@ export const NewChatPage = ({}: Props) => {
         content,
       });
 
+      const systemMessages = prompts.map<{ role: "system"; content: string }>(
+        (prompt) => ({ role: "system", content: prompt.content })
+      );
+
       await createAssistantMessageMutation.mutateAsync({
         chatId: newChat.id,
         model: newChat.model,
-        messages: [{ role: userMessage.role, content: userMessage.content }],
+        messages: [
+          ...systemMessages,
+          { role: userMessage.role, content: userMessage.content },
+        ],
       });
 
       // ?id=のままだとリロード時におかしな挙動になるため、URLだけ密かに変える
@@ -66,15 +75,6 @@ export const NewChatPage = ({}: Props) => {
       />
     );
   } else {
-    return (
-      <Box sx={{ position: "relative" }} h="100%">
-        {/* <Box p="sm">
-          <NewMessageForm handleSubmit={handleSubmit} />
-        </Box> */}
-        <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" pb="xl">
-          <NewMessageForm handleSubmit={handleSubmit} />
-        </Box>
-      </Box>
-    );
+    return <NewChatForm handleSubmit={handleSubmit} />;
   }
 };

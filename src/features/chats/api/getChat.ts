@@ -6,7 +6,7 @@ export type ChatRawData = {
   id: string;
   userId: string;
   model: AssignableModel;
-  systemContent: string | null;
+  prompts: { id: string; title: string; content: string }[];
   title: string;
   /** 作成直後はnullの場合がある */
   createdAt: Timestamp | null;

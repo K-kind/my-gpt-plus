@@ -50,15 +50,21 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
       await createAssistantMessageMutation.mutateAsync({
         chatId: chat.id,
         model: chat.model,
-        messages: messages.map((message) => {
-          return { role: message.role, content: message.content };
-        }),
+        messages: [
+          ...chat.prompts.map((prompt) => {
+            return { role: "system", content: prompt.content } as const;
+          }),
+          ...messages.map((message) => {
+            return { role: message.role, content: message.content };
+          }),
+        ],
       });
       scrollToBottom();
     },
     [
       chat.id,
       chat.model,
+      chat.prompts,
       createAssistantMessageMutation,
       createUserMessageMutation,
       messageListByChatIdQuery.data,
