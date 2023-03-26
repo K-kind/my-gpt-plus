@@ -13,7 +13,7 @@ export const AuthGuard = ({ children }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) return;
+    if (user !== null) return;
     if (!(AUTHORIZED_PATHS as ReadonlyArray<string>).includes(router.asPath))
       return;
 
