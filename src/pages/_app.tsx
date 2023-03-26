@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "@/features/auth/providers/auth";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -44,7 +45,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     >
       <Notifications position="top-right" />
       <QueryClientProvider client={queryClient}>
-        {getLayout(<Component {...pageProps} />)}
+        <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
       </QueryClientProvider>
     </MantineProvider>
   );
