@@ -8,13 +8,17 @@ import {
 import { promptListQueryKey } from "@/features/prompts/hooks/usePromptList";
 import { Prompt } from "@/features/prompts/types/prompt";
 
-export const useCreatePrompt = () => {
+type Options = {
+  prompts?: Prompt[];
+};
+
+export const useCreatePrompt = ({ prompts }: Options = {}) => {
   const queryClient = useQueryClient();
   const { user } = useContext(AuthContext);
 
   return useMutation({
     mutationFn: (params: CreatePromptDTO["params"]) =>
-      createPrompt({ userId: user!.id, params }),
+      createPrompt({ userId: user!.id, prompts, params }),
     onSuccess: (prompt) => {
       queryClient.setQueryData<Prompt[]>(
         promptListQueryKey({ userId: user!.id }),
