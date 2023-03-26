@@ -14,7 +14,7 @@ export const LetsPlayButton = () => {
   const anonSignIn = async () => {
     try {
       await anonSignInMutation.mutateAsync();
-      await router.push("/chats");
+      await router.push("/chats/new");
       notifySuccess({
         message: "ようこそ！お気軽にお試しください",
         options: { autoClose: 5000 },
@@ -26,7 +26,7 @@ export const LetsPlayButton = () => {
 
   const onClickPlay = async () => {
     if (user) {
-      await router.push("/chats");
+      await router.push("/chats/new");
     } else {
       await anonSignIn();
     }
