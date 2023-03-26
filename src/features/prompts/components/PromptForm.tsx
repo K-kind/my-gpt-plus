@@ -1,21 +1,16 @@
-import { useCreatePrompt } from "@/features/prompts/hooks/useCreatePrompt";
 import { Prompt } from "@/features/prompts/types/prompt";
-import { useNotification } from "@/shared/hooks/useNotification";
 import { Button, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useRouter } from "next/router";
-import { useCallback } from "react";
 
-type FormValues = { title: string; content: string };
+export type FormValues = { title: string; content: string };
 
 type Props = {
   prompt?: Prompt;
+  handleSubmit: (formValues: FormValues) => void;
+  isLoading: boolean;
 };
 
-export const PromptForm = ({ prompt }: Props) => {
-  const router = useRouter();
-  const { notifyError, notifySuccess } = useNotification();
-
+export const PromptForm = ({ prompt, handleSubmit, isLoading }: Props) => {
   const form = useForm<FormValues>({
     initialValues: {
       title: prompt?.title ?? "",
@@ -30,21 +25,6 @@ export const PromptForm = ({ prompt }: Props) => {
       content: (value) => (value ? null : "入力してください"),
     },
   });
-
-  const createPromptMutation = useCreatePrompt();
-
-  const handleSubmit = useCallback(
-    async (formValues: FormValues) => {
-      try {
-        await createPromptMutation.mutateAsync(formValues);
-        notifySuccess({ message: "保存しました" });
-        await router.push("/prompts");
-      } catch (e) {
-        notifyError({ message: "保存に失敗しました" });
-      }
-    },
-    [createPromptMutation, notifyError, notifySuccess, router]
-  );
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -69,7 +49,7 @@ export const PromptForm = ({ prompt }: Props) => {
         {...form.getInputProps("content")}
       />
 
-      <Button type="submit" loading={createPromptMutation.isLoading}>
+      <Button type="submit" loading={isLoading}>
         保存
       </Button>
     </form>

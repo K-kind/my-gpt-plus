@@ -59,7 +59,7 @@ export const ChatListTable = ({ chats, sort, toggleSort, loading }: Props) => {
               </Box>
             </td>
             <td>{MODEL_INFO[chat.model].name}</td>
-            <td>{format(chat.createdAt, "yyyy/MM/dd hh:mm")}</td>
+            <td>{format(chat.createdAt, "yyyy/MM/dd HH:mm")}</td>
             <td>
               <ChatDeleteButton id={chat.id} />
             </td>

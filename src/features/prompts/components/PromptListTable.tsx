@@ -1,7 +1,8 @@
 import { PromptDeleteButton } from "@/features/prompts/components/PromptDeleteButton";
 import { Prompt } from "@/features/prompts/types/prompt";
 import { format } from "@/shared/utils/date";
-import { Box, Table } from "@mantine/core";
+import { Button, Flex, Table } from "@mantine/core";
+import { IconPencil } from "@tabler/icons-react";
 import Link from "next/link";
 
 type Props = {
@@ -21,25 +22,22 @@ export const PromptListTable = ({ prompts }: Props) => {
       <tbody>
         {prompts.map((prompt) => (
           <tr key={prompt.id}>
-            <td style={{ padding: 0 }}>
-              <Box
-                component={Link}
-                href={`/prompt/${prompt.id}`}
-                p={10}
-                h="100%"
-                sx={(theme) => ({
-                  display: "block",
-                  textDecoration: "none",
-                  "&:hover": { backgroundColor: theme.colors.blue[0] },
-                })}
-                c="blue"
-              >
-                {prompt.title}
-              </Box>
-            </td>
-            <td>{format(prompt.createdAt, "yyyy/MM/dd hh:mm")}</td>
+            <td>{prompt.title}</td>
+            <td>{format(prompt.createdAt, "yyyy/MM/dd HH:mm")}</td>
             <td>
-              <PromptDeleteButton prompt={prompt} prompts={prompts} />
+              <Flex align="center">
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  px={5.08}
+                  component={Link}
+                  href={`/prompts/${prompt.id}/edit`}
+                  mr="xs"
+                >
+                  <IconPencil size="1.125rem" />
+                </Button>
+                <PromptDeleteButton prompt={prompt} prompts={prompts} />
+              </Flex>
             </td>
           </tr>
         ))}
