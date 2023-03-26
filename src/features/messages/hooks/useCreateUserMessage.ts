@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createMessage } from "@/features/messages/api/createMessage";
 import { messageListByChatIdQueryKey } from "@/features/messages/hooks/useMessageList";
-import { Message } from "@/features/chats/types/message";
+import { Message } from "@/features/messages/types/message";
 import { useContext } from "react";
 import { AuthContext } from "@/features/auth/providers/auth";
 

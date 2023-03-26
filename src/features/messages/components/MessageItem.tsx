@@ -1,4 +1,4 @@
-import { Message } from "@/features/chats/types/message";
+import { Message } from "@/features/messages/types/message";
 import { MarkdownRenderer } from "@/shared/components/MarkdownRenderer";
 import { Avatar, Box, Container, Flex } from "@mantine/core";
 import { IconRobot, IconUser } from "@tabler/icons-react";

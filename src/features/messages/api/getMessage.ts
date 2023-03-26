@@ -1,6 +1,6 @@
 import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/shared/lib/firebase";
-import { Message } from "@/features/chats/types/message";
+import { Message } from "@/features/messages/types/message";
 
 export type UserMessageRawData = {
   id: string;

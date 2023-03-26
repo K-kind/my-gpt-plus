@@ -4,7 +4,7 @@ import {
   createChatCompletion,
   CreateChatCompletionDTO,
 } from "@/features/chats/api/createChatCompletion";
-import { Message } from "@/features/chats/types/message";
+import { Message } from "@/features/messages/types/message";
 import { messageListByChatIdQueryKey } from "@/features/messages/hooks/useMessageList";
 import { useContext } from "react";
 import { AuthContext } from "@/features/auth/providers/auth";

@@ -1,4 +1,4 @@
-import { Message } from "@/features/chats/types/message";
+import { Message } from "@/features/messages/types/message";
 import { MessageItem } from "@/features/messages/components/MessageItem";
 import { RandomLoader } from "@/shared/components/loaders/RandomLoader";
 import { Box, Flex } from "@mantine/core";
