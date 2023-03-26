@@ -27,5 +27,18 @@ service cloud.firestore {
         allow read, update, delete: if isMessageOwner();
       }
     }
+
+    // Promptsコレクションに対するルール
+    match /prompts/{promptId} {
+      function isPromptOwner() {
+        return request.auth != null && request.auth.uid == resource.data.userId;
+      }
+
+      // 作成(C): ユーザIDがリクエスト送信者と一致する場合のみ許可
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+
+      // 読み取り(R), 更新(U), 削除(D): 本人のみ許可
+      allow read, update, delete: if isPromptOwner();
+    }
   }
 }

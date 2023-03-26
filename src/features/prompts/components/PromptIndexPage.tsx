@@ -1,16 +1,16 @@
-import { ChatList } from "@/features/chats/components/ChatList";
+import { PromptList } from "@/features/prompts/components/PromptList";
 import { ContentLoader } from "@/shared/components/ContentLoader";
 import { Container, Text } from "@mantine/core";
 import { Suspense } from "react";
 
-export const ChatIndexPage = () => {
+export const PromptIndexPage = () => {
   return (
     <Container>
       <Text component="h1" fz="xl">
-        チャット履歴
+        メタプロンプト管理
       </Text>
       <Suspense fallback={<ContentLoader />}>
-        <ChatList />
+        <PromptList />
       </Suspense>
     </Container>
   );

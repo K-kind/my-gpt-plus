@@ -7,7 +7,7 @@ import {
   Divider,
 } from "@mantine/core";
 import Link from "next/link";
-import { IconList, IconPlus } from "@tabler/icons-react";
+import { IconAdjustments, IconList, IconPlus } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { NavChatList } from "@/shared/components/NavChatList";
 import { Suspense } from "react";
@@ -51,6 +51,13 @@ export const AppNavbar = () => {
           active={router.pathname === "/chats"}
           href={"/chats"}
           icon={<IconList size="1rem" stroke={1.5} />}
+        />
+        <NavLink
+          label="メタプロンプト管理"
+          component={Link}
+          active={router.pathname.startsWith("/prompts")}
+          href={"/prompts"}
+          icon={<IconAdjustments size="1rem" stroke={1.5} />}
         />
       </Navbar.Section>
     </Navbar>
