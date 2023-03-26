@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -41,6 +42,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         },
       }}
     >
+      <Notifications position="top-right" />
       <QueryClientProvider client={queryClient}>
         {getLayout(<Component {...pageProps} />)}
       </QueryClientProvider>
