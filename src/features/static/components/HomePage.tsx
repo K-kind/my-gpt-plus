@@ -1,5 +1,6 @@
+import { LetsPlayButton } from "@/features/static/components/LetsPlayButton";
 import { ItemWithTitle } from "@/shared/components/ItemWithTitle";
-import { Button, Container, List } from "@mantine/core";
+import { Container, List } from "@mantine/core";
 
 export const HomePage = () => {
   return (
@@ -22,7 +23,7 @@ export const HomePage = () => {
         </List>
       </ItemWithTitle>
 
-      <Button>試してみる</Button>
+      <LetsPlayButton />
     </Container>
   );
 };
