@@ -1,3 +1,4 @@
+import { ChatListTable } from "@/features/chats/components/ChatListTable";
 import { useChatList } from "@/features/chats/hooks/useChatList";
 import { Box, Button } from "@mantine/core";
 import { useEffect, useState } from "react";
@@ -23,6 +24,10 @@ export const ChatList = () => {
     sort: pageState.sort,
     after: pageState.after,
     before: pageState.before,
+    config: {
+      // 次ページに行くとき、ロード完了まで前のデータを表示してチラつきをなくす
+      keepPreviousData: true,
+    },
   });
 
   const chats = chatListQuery.data!;
@@ -70,15 +75,16 @@ export const ChatList = () => {
 
   return (
     <Box>
-      <Button onClick={toggleSort}>
-        {pageState.sort === "desc" ? "降順" : "昇順"}
-      </Button>
-      <div>
-        {chats.map((chat) => (
-          <p key={chat.id}>{`${chat.id}: ${chat.title} ${chat.createdAt}`}</p>
-        ))}
-      </div>
-      <Box>
+      <Box mih={300}>
+        <ChatListTable
+          chats={chats}
+          sort={pageState.sort}
+          toggleSort={toggleSort}
+          loading={chatListQuery.isLoading}
+        />
+      </Box>
+
+      <Box mt="lg">
         <Button
           disabled={
             chatListQuery.isLoading || (chats[0] && chats[0].id === firstChatId)
@@ -90,6 +96,7 @@ export const ChatList = () => {
         <Button
           disabled={chatListQuery.isLoading || chats.length < PER_PAGE}
           onClick={handleNext}
+          ml="sm"
         >
           次へ
         </Button>
