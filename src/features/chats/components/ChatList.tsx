@@ -94,7 +94,11 @@ export const ChatList = () => {
           前へ
         </Button>
         <Button
-          disabled={chatListQuery.isLoading || chats.length < PER_PAGE}
+          disabled={
+            // beforeがあれば、一度下がったということなので、削除後に数が少なくなっても、次へは押せる
+            chatListQuery.isLoading ||
+            (!pageState.before && chats.length < PER_PAGE)
+          }
           onClick={handleNext}
           ml="sm"
         >

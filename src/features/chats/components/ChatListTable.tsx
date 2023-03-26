@@ -19,7 +19,7 @@ export const ChatListTable = ({ chats, sort, toggleSort, loading }: Props) => {
         <tr>
           <th style={{ width: "50%" }}>タイトル</th>
           <th>モデル</th>
-          <th>
+          <th style={{ width: "180px" }}>
             <Flex align="center">
               作成日時
               <ActionIcon
