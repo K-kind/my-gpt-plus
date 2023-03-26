@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Textarea } from "@mantine/core";
+import { Button, Container, Flex, Textarea } from "@mantine/core";
 import { IconSend } from "@tabler/icons-react";
 import { KeyboardEvent, useCallback, useState } from "react";
 
@@ -34,6 +34,7 @@ export const NewMessageForm = ({ handleSubmit }: Props) => {
           minRows={2}
           maxRows={6}
           sx={{ flex: 1 }}
+          placeholder="質問してください"
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={onKeyDown}
         />

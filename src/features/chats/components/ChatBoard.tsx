@@ -1,7 +1,7 @@
 import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAssistantMessage";
 import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
-import { Box, Flex, ScrollArea, Text } from "@mantine/core";
+import { Badge, Box, Flex, ScrollArea, Text } from "@mantine/core";
 import { useCallback, useRef } from "react";
 import { MessageList } from "@/features/messages/components/MessageList";
 import { useMessageListByChatId } from "@/features/messages/hooks/useMessageList";
@@ -87,6 +87,15 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
           <Text c="gray.7" fz="sm">
             モデル: {getModelInfo(chat).name}
           </Text>
+          {chat.prompts.length > 0 && (
+            <Flex align="center" ml="xs" gap="xs" wrap="wrap">
+              {chat.prompts.map((prompt) => (
+                <Badge key={prompt.id} size="lg" variant="outline">
+                  {prompt.title}
+                </Badge>
+              ))}
+            </Flex>
+          )}
         </Flex>
         <MessageList
           messages={messageListByChatIdQuery.data!}
