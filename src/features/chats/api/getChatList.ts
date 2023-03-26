@@ -9,9 +9,11 @@ import {
   orderBy,
   query,
   startAfter,
+  where,
 } from "firebase/firestore";
 
 export type GetChatListDTO = {
+  userId: string;
   perPage?: number;
   /** ソートはcreatedAtのみ */
   sort?: "asc" | "desc";
@@ -20,6 +22,7 @@ export type GetChatListDTO = {
 };
 
 export const getChatList = async ({
+  userId,
   sort = "desc",
   perPage = 12,
   after,
@@ -28,6 +31,7 @@ export const getChatList = async ({
   const q = query(
     collection(db, "chats"),
     ...[
+      where("userId", "==", userId),
       orderBy("createdAt", sort),
       ...(after ? [startAfter(after)] : []),
       ...(before ? [endBefore(before)] : []),

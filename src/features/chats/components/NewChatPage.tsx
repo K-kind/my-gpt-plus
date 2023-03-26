@@ -27,7 +27,6 @@ export const NewChatPage = ({}: Props) => {
   const handleSubmit = useCallback(
     async (content: string, setContent: (content: string) => void) => {
       const newChat = await createChatMutation.mutateAsync({
-        userId: "sample",
         model: "gpt-3.5-turbo",
         systemContent: null,
         initialContent: content,
