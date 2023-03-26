@@ -5,6 +5,7 @@ import { Message } from "@/features/chats/types/message";
 export type UserMessageRawData = {
   id: string;
   chatId: string;
+  userId: string;
   role: "user";
   content: string;
   /** 作成直後はnullの場合がある */
@@ -14,6 +15,7 @@ export type UserMessageRawData = {
 export type AssistantMessageRawData = {
   id: string;
   chatId: string;
+  userId: string;
   role: "assistant";
   content: string;
   finishReason: string;

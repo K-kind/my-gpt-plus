@@ -16,12 +16,15 @@ service cloud.firestore {
 
       // Messagesサブコレクションに対するルール
       match /messages/{messageId} {
+        function isMessageOwner() {
+          return request.auth != null && request.auth.uid == resource.data.userId;
+        }
 
-        // 作成(C): チャットの所有者である場合のみ許可
-        allow create: if isChatOwner();
+        // 作成(C): ユーザIDがリクエスト送信者と一致する場合のみ許可
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
 
-        // 読み取り(R), 更新(U), 削除(D): チャットの所有者である場合のみ許可
-        allow read, update, delete: if isChatOwner();
+        // 読み取り(R), 更新(U), 削除(D): 本人のみ許可
+        allow read, update, delete: if isMessageOwner();
       }
     }
   }

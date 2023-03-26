@@ -1,6 +1,7 @@
 export type UserMessage = {
   id: string;
   chatId: string;
+  userId: string;
   role: "user";
   content: string;
   createdAt: Date;
@@ -9,6 +10,7 @@ export type UserMessage = {
 export type AssistantMessage = {
   id: string;
   chatId: string;
+  userId: string;
   role: "assistant";
   content: string;
   finishReason: string;

@@ -4,12 +4,14 @@ import { getMessage } from "@/features/messages/api/getMessage";
 
 type CreateUserMessageParams = {
   chatId: string;
+  userId: string;
   role: "user";
   content: string;
 };
 
 type CreateAssistantMessageParams = {
   chatId: string;
+  userId: string;
   role: "assistant";
   content: string;
   finishReason: string;

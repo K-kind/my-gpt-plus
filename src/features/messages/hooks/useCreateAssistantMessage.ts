@@ -6,9 +6,12 @@ import {
 } from "@/features/chats/api/createChatCompletion";
 import { Message } from "@/features/chats/types/message";
 import { messageListByChatIdQueryKey } from "@/features/messages/hooks/useMessageList";
+import { useContext } from "react";
+import { AuthContext } from "@/features/auth/providers/auth";
 
 type CreateAssistantMessageParams = CreateChatCompletionDTO["params"] & {
   chatId: string;
+  userId: string;
 };
 
 const createAssistantMessage = async (params: CreateAssistantMessageParams) => {
@@ -16,6 +19,7 @@ const createAssistantMessage = async (params: CreateAssistantMessageParams) => {
   return await createMessage({
     params: {
       chatId: params.chatId,
+      userId: params.userId,
       role: "assistant",
       content: data.choices[0].message.content.trim(),
       finishReason: data.choices[0].finish_reason,
@@ -30,12 +34,14 @@ const createAssistantMessage = async (params: CreateAssistantMessageParams) => {
 
 export const useCreateAssistantMessage = () => {
   const queryClient = useQueryClient();
+  const { user } = useContext(AuthContext);
 
   return useMutation({
-    mutationFn: createAssistantMessage,
+    mutationFn: (params: Omit<CreateAssistantMessageParams, "userId">) =>
+      createAssistantMessage({ userId: user!.id, ...params }),
     onSuccess: (message) => {
       queryClient.setQueryData<Message[]>(
-        messageListByChatIdQueryKey(message.chatId),
+        messageListByChatIdQueryKey(message.chatId, { userId: user!.id }),
         (messages) => {
           if (messages == undefined) return [message];
           if (messages.some(({ id }) => id === message.id)) return messages;
