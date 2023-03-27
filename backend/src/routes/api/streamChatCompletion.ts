@@ -12,11 +12,15 @@ router.post("/", async (req: express.Request, res: express.Response) => {
 
   const params = validateParams(req.body);
   if (params == null) {
-    throw new Error("Invalid argument");
+    return res.status(400).send({ message: "Invalid argument" });
   }
 
-  for await (const data of streamChatCompletion(params)) {
-    res.write(data);
+  try {
+    for await (const data of streamChatCompletion(params)) {
+      res.write(data);
+    }
+  } catch (e) {
+    return res.status(500).send({ message: "Internal server error" });
   }
   res.end();
 });
