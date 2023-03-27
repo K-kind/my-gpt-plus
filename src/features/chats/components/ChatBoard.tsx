@@ -115,7 +115,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
 
   return (
     <Box sx={{ position: "relative" }} h="100%">
-      <ScrollArea h="calc(100vh - 90px)" viewportRef={viewport}>
+      <ScrollArea h="calc(100vh - 98px)" viewportRef={viewport}>
         <Flex
           justify="center"
           align="center"
@@ -143,7 +143,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
           isGenerationg={streamChatCompletionMutation.isLoading}
         />
       </ScrollArea>
-      <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" pb="xl">
+      <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" py="md">
         <NewMessageForm handleSubmit={handleSubmit} />
       </Box>
     </Box>
