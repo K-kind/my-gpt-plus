@@ -33,7 +33,7 @@ export const PromptEditPage = () => {
   return (
     <Container>
       <Text component="h1" fz="xl">
-        メタプロンプト編集
+        事前指示編集
       </Text>
       <PromptForm
         prompt={promptQuery.data!}

@@ -15,7 +15,7 @@ export const HomePage = () => {
 
       <ItemWithTitle title="独自のメリット">
         <List>
-          <List.Item>質問本文とは別のメタ情報のセット・管理ができる</List.Item>
+          <List.Item>質問の事前指示のセット・管理ができる</List.Item>
           <List.Item>チャット履歴を確認できる</List.Item>
           <List.Item>GPT-4モデルに対応予定（API許可が下り次第）</List.Item>
         </List>

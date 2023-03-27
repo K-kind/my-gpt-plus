@@ -53,7 +53,7 @@ export const AppNavbar = () => {
           icon={<IconList size="1rem" stroke={1.5} />}
         />
         <NavLink
-          label="メタプロンプト管理"
+          label="事前指示管理"
           component={Link}
           active={router.pathname.startsWith("/prompts")}
           href={"/prompts"}

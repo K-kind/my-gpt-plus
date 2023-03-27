@@ -8,6 +8,7 @@ import { useCallback, useMemo, useState } from "react";
 import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
 import { Prompt } from "@/features/prompts/types/prompt";
 import { usePromptList } from "@/features/prompts/hooks/usePromptList";
+import { MiniPromptHelpMark } from "@/features/chats/components/MiniPromptHelpMark";
 
 export type HandleSubmitParams = {
   model: AssignableModel;
@@ -76,7 +77,12 @@ export const NewChatForm = ({ handleSubmit }: Props) => {
         <MultiSelect
           data={promptOptions}
           value={selectedPromptIds}
-          label="メタプロンプト"
+          label={
+            <Flex align="center">
+              <Box mr={4}>事前指示</Box>
+              <MiniPromptHelpMark />
+            </Flex>
+          }
           searchable
           clearable
           nothingFound="データが見つかりません"

@@ -29,7 +29,7 @@ export const PromptNewPage = () => {
   return (
     <Container>
       <Text component="h1" fz="xl">
-        メタプロンプト作成
+        事前指示作成
       </Text>
       <PromptForm
         handleSubmit={handleSubmit}
