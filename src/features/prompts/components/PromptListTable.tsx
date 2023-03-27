@@ -1,7 +1,8 @@
+import { PromptDefaultCheck } from "@/features/prompts/components/PromptDefaultCheck";
 import { PromptDeleteButton } from "@/features/prompts/components/PromptDeleteButton";
 import { Prompt } from "@/features/prompts/types/prompt";
 import { format } from "@/shared/utils/date";
-import { Button, Flex, Table } from "@mantine/core";
+import { Box, Button, Flex, Table } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -16,6 +17,7 @@ export const PromptListTable = ({ prompts }: Props) => {
         <tr>
           <th style={{ width: "50%" }}>タイトル</th>
           <th style={{ width: "180px" }}>作成日時</th>
+          <th style={{ width: "90px" }}>デフォルト</th>
           <th></th>
         </tr>
       </thead>
@@ -24,6 +26,11 @@ export const PromptListTable = ({ prompts }: Props) => {
           <tr key={prompt.id}>
             <td>{prompt.title}</td>
             <td>{format(prompt.createdAt, "yyyy/MM/dd HH:mm")}</td>
+            <td>
+              <Box ml="sm">
+                <PromptDefaultCheck prompt={prompt} />
+              </Box>
+            </td>
             <td>
               <Flex align="center">
                 <Button
