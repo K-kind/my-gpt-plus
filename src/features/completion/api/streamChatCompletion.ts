@@ -5,7 +5,7 @@ export type StreamChatDTO = {
 };
 
 export async function* streamChatCompletion({ params }: StreamChatDTO) {
-  const completion = await fetch("/api/streamChatCompletion", {
+  const completion = await fetch("/api/stream_chat_completion", {
     headers: {
       "Content-Type": "application/json",
     },
