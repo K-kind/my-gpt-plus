@@ -1,6 +1,5 @@
 import { getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -15,9 +14,4 @@ const firebaseConfig = {
 
 export const app = getApps()[0] ?? initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const functions = getFunctions(app, "asia-northeast1");
 export const db = getFirestore(app);
-
-if (process.env.NEXT_PUBLIC_USE_FUNCTION_EMULATOR === "true") {
-  connectFunctionsEmulator(functions, "localhost", 5001);
-}
