@@ -1,9 +1,10 @@
-import { ChatBoard } from "@/features/chats/components/ChatBoard";
-import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAssistantMessage";
+import {
+  ChatBoard,
+  ChatBoardHandle,
+} from "@/features/chats/components/ChatBoard";
 import { useCreateChat } from "@/features/chats/hooks/useCreateChat";
-import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import {
   HandleSubmitParams,
@@ -16,15 +17,23 @@ export const NewChatPage = ({}: Props) => {
   const router = useRouter();
   const [chat, setChat] = useState<Chat | null>(null);
 
+  const chatBoardRef = useRef<ChatBoardHandle>(
+    null as unknown as ChatBoardHandle
+  );
+
   const createChatMutation = useCreateChat();
-  const createUserMessageMutation = useCreateUserMessage();
-  const createAssistantMessageMutation = useCreateAssistantMessage();
 
   useEffect(() => {
     if (router.query.id == undefined) {
       setChat(null);
     }
   }, [router.query]);
+
+  const waitForRef = async (): Promise<void> => {
+    while (!chatBoardRef.current) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  };
 
   const handleSubmit = useCallback(
     async ({ model, prompts, content, setContent }: HandleSubmitParams) => {
@@ -34,46 +43,19 @@ export const NewChatPage = ({}: Props) => {
         initialContent: content,
       });
       setChat(newChat);
-      setContent("");
 
       router.push(`?id=${newChat.id}`);
-
-      const userMessage = await createUserMessageMutation.mutateAsync({
-        chatId: newChat.id,
-        content,
-      });
-
-      const systemMessages = prompts.map<{ role: "system"; content: string }>(
-        (prompt) => ({ role: "system", content: prompt.content })
-      );
-
-      await createAssistantMessageMutation.mutateAsync({
-        chatId: newChat.id,
-        model: newChat.model,
-        messages: [
-          ...systemMessages,
-          { role: userMessage.role, content: userMessage.content },
-        ],
-      });
+      await waitForRef();
+      await chatBoardRef.current!.handleSubmit(content, setContent);
 
       // ?id=のままだとリロード時におかしな挙動になるため、URLだけ密かに変える
       history.replaceState(undefined, "", `/chats/${newChat.id}`);
     },
-    [
-      createAssistantMessageMutation,
-      createChatMutation,
-      createUserMessageMutation,
-      router,
-    ]
+    [createChatMutation, router]
   );
 
   if (chat) {
-    return (
-      <ChatBoard
-        chat={chat}
-        loadingNewMessage={createAssistantMessageMutation.isLoading}
-      />
-    );
+    return <ChatBoard ref={chatBoardRef} chat={chat} />;
   } else {
     return <NewChatForm handleSubmit={handleSubmit} />;
   }

@@ -1,25 +1,8 @@
-export type UserMessage = {
+export type Message = {
   id: string;
   chatId: string;
   userId: string;
-  role: "user";
+  role: "user" | "assistant";
   content: string;
   createdAt: Date;
 };
-
-export type AssistantMessage = {
-  id: string;
-  chatId: string;
-  userId: string;
-  role: "assistant";
-  content: string;
-  finishReason: string;
-  completionTokens: number;
-  promptTokens: number;
-  totalTokens: number;
-  idFromOpenAI: string;
-  model: string;
-  createdAt: Date;
-};
-
-export type Message = UserMessage | AssistantMessage;

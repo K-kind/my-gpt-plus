@@ -1,27 +1,40 @@
-import { useCreateAssistantMessage } from "@/features/messages/hooks/useCreateAssistantMessage";
-import { useCreateUserMessage } from "@/features/messages/hooks/useCreateUserMessage";
 import { Chat } from "@/features/chats/types/chat";
 import { Badge, Box, Flex, ScrollArea, Text } from "@mantine/core";
-import { useCallback, useRef } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import { MessageList } from "@/features/messages/components/MessageList";
 import { useMessageListByChatId } from "@/features/messages/hooks/useMessageList";
 import { getModelInfo } from "@/features/chats/models/chat";
 import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
+import { useStreamChatCompletion } from "@/features/completion/hooks/useStreamChatCompletion";
+import { useCreateMessage } from "@/features/messages/hooks/useCreateMessage";
+import { Message } from "@/features/messages/types/message";
+
+export type ChatBoardHandle = {
+  handleSubmit: (
+    content: string,
+    setContent: (content: string) => void
+  ) => Promise<void>;
+};
 
 type Props = {
   chat: Chat;
-  loadingNewMessage?: boolean;
 };
 
-export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
+const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
   const messageListByChatIdQuery = useMessageListByChatId({
     chatId: chat.id,
   });
 
   const viewport = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
 
-  const createUserMessageMutation = useCreateUserMessage();
-  const createAssistantMessageMutation = useCreateAssistantMessage();
+  const createMessageMutation = useCreateMessage();
+  const streamChatCompletionMutation = useStreamChatCompletion();
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     viewport.current.scrollTo({
@@ -32,45 +45,73 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
 
   const handleSubmit = useCallback(
     async (content: string, setContent: (content: string) => void) => {
-      const userMessage = await createUserMessageMutation.mutateAsync({
+      const userMessage = await createMessageMutation.mutateAsync({
         chatId: chat.id,
+        role: "user",
         content,
       });
       setContent("");
-      scrollToBottom("auto");
-      // ローディングが表示されるのを待ってから
-      setTimeout(scrollToBottom, 100);
+      scrollToBottom();
 
+      const promptMessages = chat.prompts.map((prompt) => {
+        return { role: "system", content: prompt.content } as const;
+      });
       // これまでのmessages + 今の質問messageを作る（この僅かな間にキャッシュが更新されている可能性を吸収）
       const currentMessages = messageListByChatIdQuery.data!;
       const messages = currentMessages.some(({ id }) => id === userMessage.id)
         ? currentMessages
         : [...currentMessages, userMessage];
 
-      await createAssistantMessageMutation.mutateAsync({
-        chatId: chat.id,
-        model: chat.model,
-        messages: [
-          ...chat.prompts.map((prompt) => {
-            return { role: "system", content: prompt.content } as const;
-          }),
-          ...messages.map((message) => {
-            return { role: message.role, content: message.content };
-          }),
-        ],
+      await streamChatCompletionMutation.start({
+        params: {
+          model: chat.model,
+          messages: [
+            ...promptMessages,
+            ...messages.map((m) => ({ role: m.role, content: m.content })),
+          ],
+        },
+        onSuccess: async (content) => {
+          await createMessageMutation.mutateAsync({
+            chatId: chat.id,
+            role: "assistant",
+            content,
+          });
+          streamChatCompletionMutation.setContent(undefined);
+        },
       });
-      scrollToBottom();
     },
     [
       chat.id,
       chat.model,
       chat.prompts,
-      createAssistantMessageMutation,
-      createUserMessageMutation,
+      createMessageMutation,
       messageListByChatIdQuery.data,
       scrollToBottom,
+      streamChatCompletionMutation,
     ]
   );
+
+  useImperativeHandle(ref, () => ({
+    handleSubmit,
+  }));
+
+  const messages = useMemo<Pick<Message, "id" | "role" | "content">[]>(() => {
+    const persistedMessages = messageListByChatIdQuery.data!;
+    if (streamChatCompletionMutation.content == undefined) {
+      return persistedMessages;
+    }
+    if (persistedMessages[0]?.role === "user") {
+      return [
+        ...persistedMessages,
+        {
+          id: "new",
+          role: "assistant",
+          content: streamChatCompletionMutation.content,
+        },
+      ];
+    }
+    return persistedMessages;
+  }, [messageListByChatIdQuery.data, streamChatCompletionMutation.content]);
 
   return (
     <Box sx={{ position: "relative" }} h="100%">
@@ -98,10 +139,8 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
           )}
         </Flex>
         <MessageList
-          messages={messageListByChatIdQuery.data!}
-          loadingNewMessage={
-            loadingNewMessage || createAssistantMessageMutation.isLoading
-          }
+          messages={messages}
+          isGenerationg={streamChatCompletionMutation.isLoading}
         />
       </ScrollArea>
       <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" pb="xl">
@@ -109,4 +148,8 @@ export const ChatBoard = ({ chat, loadingNewMessage }: Props) => {
       </Box>
     </Box>
   );
-};
+});
+
+ChatBoard.displayName = "ChatBoard";
+
+export { ChatBoard };

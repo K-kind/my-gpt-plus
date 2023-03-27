@@ -5,7 +5,7 @@ import { IconRobot, IconUser } from "@tabler/icons-react";
 import { useMemo } from "react";
 
 type Props = {
-  message: Message;
+  message: Pick<Message, "id" | "role" | "content">;
 };
 
 export const MessageItem = ({ message }: Props) => {

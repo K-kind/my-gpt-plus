@@ -38,7 +38,7 @@ export const NewMessageForm = ({ handleSubmit }: Props) => {
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={onKeyDown}
         />
-        <Button radius="xl" px="xs" onClick={onClick}>
+        <Button radius="xl" px="xs" onClick={onClick} disabled={!content}>
           <IconSend />
         </Button>
       </Flex>

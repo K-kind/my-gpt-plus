@@ -2,28 +2,15 @@ import { serverTimestamp, addDoc, collection } from "firebase/firestore";
 import { db } from "@/shared/lib/firebase";
 import { getMessage } from "@/features/messages/api/getMessage";
 
-type CreateUserMessageParams = {
+type CreateMessageParams = {
   chatId: string;
   userId: string;
-  role: "user";
+  role: "user" | "assistant";
   content: string;
-};
-
-type CreateAssistantMessageParams = {
-  chatId: string;
-  userId: string;
-  role: "assistant";
-  content: string;
-  finishReason: string;
-  completionTokens: number;
-  promptTokens: number;
-  totalTokens: number;
-  idFromOpenAI: string;
-  model: string;
 };
 
 export type CreateMessageDTO = {
-  params: CreateUserMessageParams | CreateAssistantMessageParams;
+  params: CreateMessageParams;
 };
 
 export const createMessage = async ({ params }: CreateMessageDTO) => {

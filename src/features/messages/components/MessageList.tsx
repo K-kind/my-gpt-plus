@@ -1,22 +1,23 @@
 import { Message } from "@/features/messages/types/message";
 import { MessageItem } from "@/features/messages/components/MessageItem";
-import { RandomLoader } from "@/shared/components/loaders/RandomLoader";
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 
 type Props = {
-  messages: Message[];
-  loadingNewMessage: boolean;
+  messages: Pick<Message, "id" | "role" | "content">[];
+  isGenerationg: boolean;
 };
 
-export const MessageList = ({ messages, loadingNewMessage }: Props) => {
+export const MessageList = ({ messages, isGenerationg }: Props) => {
   return (
-    <Box pb={loadingNewMessage ? 36 : 120}>
+    <Box pb={120}>
       {messages.map((message) => (
         <MessageItem key={message.id} message={message} />
       ))}
-      {loadingNewMessage && (
-        <Flex justify="center" py="xs" bg="gray.2">
-          <RandomLoader />
+      {isGenerationg && (
+        <Flex justify="center" pt="md">
+          <Text color="gray.6" fz="sm">
+            生成中...
+          </Text>
         </Flex>
       )}
     </Box>

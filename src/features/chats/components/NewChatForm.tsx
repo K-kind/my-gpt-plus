@@ -3,7 +3,7 @@ import {
   ASSIGNABLE_MODEL,
   MODEL_INFO,
 } from "@/features/chats/types/chat";
-import { Box, Flex, MultiSelect, Select, Text } from "@mantine/core";
+import { Box, Flex, MultiSelect, Select } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
 import { Prompt } from "@/features/prompts/types/prompt";

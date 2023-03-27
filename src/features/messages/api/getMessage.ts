@@ -2,33 +2,15 @@ import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/shared/lib/firebase";
 import { Message } from "@/features/messages/types/message";
 
-export type UserMessageRawData = {
+export type MessageRawData = {
   id: string;
   chatId: string;
   userId: string;
-  role: "user";
+  role: "user" | "assistant";
   content: string;
   /** 作成直後はnullの場合がある */
   createdAt: Timestamp | null;
 };
-
-export type AssistantMessageRawData = {
-  id: string;
-  chatId: string;
-  userId: string;
-  role: "assistant";
-  content: string;
-  finishReason: string;
-  completionTokens: number;
-  promptTokens: number;
-  totalTokens: number;
-  idFromOpenAI: string;
-  model: string;
-  /** 作成直後はnullの場合がある */
-  createdAt: Timestamp | null;
-};
-
-export type MessageRawData = UserMessageRawData | AssistantMessageRawData;
 
 export const parseRawMessage = (rawData: MessageRawData): Message => {
   return {
