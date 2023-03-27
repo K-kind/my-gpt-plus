@@ -1,17 +1,21 @@
-import { RequestParams } from "@/server/lib/openai";
-
 export type StreamChatDTO = {
-  params: RequestParams;
+  params: {
+    model: string;
+    messages: { role: "user" | "system" | "assistant"; content: string }[];
+  };
 };
 
 export async function* streamChatCompletion({ params }: StreamChatDTO) {
-  const completion = await fetch("/api/stream_chat_completion", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(params),
-  });
+  const completion = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/stream_chat_completion`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(params),
+    }
+  );
 
   const reader = completion.body?.getReader();
 
