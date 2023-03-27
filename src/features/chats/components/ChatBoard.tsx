@@ -14,6 +14,7 @@ import { NewMessageForm } from "@/features/messages/components/NewMessageForm";
 import { useStreamChatCompletion } from "@/features/completion/hooks/useStreamChatCompletion";
 import { useCreateMessage } from "@/features/messages/hooks/useCreateMessage";
 import { Message } from "@/features/messages/types/message";
+import { useNotification } from "@/shared/hooks/useNotification";
 
 export type ChatBoardHandle = {
   handleSubmit: (
@@ -27,6 +28,7 @@ type Props = {
 };
 
 const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
+  const { notifyError } = useNotification();
   const messageListByChatIdQuery = useMessageListByChatId({
     chatId: chat.id,
   });
@@ -62,23 +64,30 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
         ? currentMessages
         : [...currentMessages, userMessage];
 
-      await streamChatCompletionMutation.start({
-        params: {
-          model: chat.model,
-          messages: [
-            ...promptMessages,
-            ...messages.map((m) => ({ role: m.role, content: m.content })),
-          ],
-        },
-        onSuccess: async (content) => {
-          await createMessageMutation.mutateAsync({
-            chatId: chat.id,
-            role: "assistant",
-            content,
+      await streamChatCompletionMutation
+        .start({
+          params: {
+            model: chat.model,
+            messages: [
+              ...promptMessages,
+              ...messages.map((m) => ({ role: m.role, content: m.content })),
+            ],
+          },
+          onSuccess: async (content) => {
+            await createMessageMutation.mutateAsync({
+              chatId: chat.id,
+              role: "assistant",
+              content,
+            });
+            streamChatCompletionMutation.setContent(undefined);
+          },
+        })
+        .catch((e) => {
+          notifyError({
+            message: "エラーが発生しました",
+            options: { autoClose: false },
           });
-          streamChatCompletionMutation.setContent(undefined);
-        },
-      });
+        });
     },
     [
       chat.id,
@@ -86,6 +95,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
       chat.prompts,
       createMessageMutation,
       messageListByChatIdQuery.data,
+      notifyError,
       scrollToBottom,
       streamChatCompletionMutation,
     ]
