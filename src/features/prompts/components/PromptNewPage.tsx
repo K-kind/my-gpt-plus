@@ -2,9 +2,10 @@ import {
   FormValues,
   PromptForm,
 } from "@/features/prompts/components/PromptForm";
+import { PromptHelpMark } from "@/features/prompts/components/PromptHelpMark";
 import { useCreatePrompt } from "@/features/prompts/hooks/useCreatePrompt";
 import { useNotification } from "@/shared/hooks/useNotification";
-import { Container, Text } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
@@ -28,9 +29,12 @@ export const PromptNewPage = () => {
 
   return (
     <Container>
-      <Text component="h1" fz="xl">
-        事前指示作成
-      </Text>
+      <Flex align="center">
+        <Text component="h1" fz="xl" mr="xs">
+          事前指示作成
+        </Text>
+        <PromptHelpMark />
+      </Flex>
       <PromptForm
         handleSubmit={handleSubmit}
         isLoading={createPromptMutation.isLoading}

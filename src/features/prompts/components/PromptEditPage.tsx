@@ -2,10 +2,11 @@ import {
   FormValues,
   PromptForm,
 } from "@/features/prompts/components/PromptForm";
+import { PromptHelpMark } from "@/features/prompts/components/PromptHelpMark";
 import { usePrompt } from "@/features/prompts/hooks/usePrompt";
 import { useUpdatePrompt } from "@/features/prompts/hooks/useUpdatePrompt";
 import { useNotification } from "@/shared/hooks/useNotification";
-import { Container, Text } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
@@ -32,9 +33,12 @@ export const PromptEditPage = () => {
 
   return (
     <Container>
-      <Text component="h1" fz="xl">
-        事前指示編集
-      </Text>
+      <Flex align="center">
+        <Text component="h1" fz="xl" mr="xs">
+          事前指示編集
+        </Text>
+        <PromptHelpMark />
+      </Flex>
       <PromptForm
         prompt={promptQuery.data!}
         handleSubmit={handleSubmit}

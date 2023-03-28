@@ -6,13 +6,7 @@ export const MiniPromptHelpMark = () => {
   const [opened, { close, open }] = useDisclosure(false);
 
   return (
-    <Popover
-      width={320}
-      position="bottom"
-      withArrow
-      shadow="md"
-      opened={opened}
-    >
+    <Popover position="bottom" withArrow shadow="md" opened={opened}>
       <Popover.Target>
         <ThemeIcon
           size={18}
@@ -27,7 +21,9 @@ export const MiniPromptHelpMark = () => {
       </Popover.Target>
       <Popover.Dropdown sx={{ pointerEvents: "none" }}>
         <Text size="sm">
-          質問文とは別にAIに指示を与えることができます。「事前指示管理」で作成可能です。
+          「コード例を示す時はPythonを使って」のような指示を設定します。
+          <br />
+          「事前指示管理」で作成可能です。
         </Text>
       </Popover.Dropdown>
     </Popover>
