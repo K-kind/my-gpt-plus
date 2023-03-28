@@ -1,6 +1,6 @@
 import { LetsPlayButton } from "@/features/static/components/LetsPlayButton";
 import { ItemWithTitle } from "@/shared/components/ItemWithTitle";
-import { Container, List } from "@mantine/core";
+import { Container, Image, List } from "@mantine/core";
 
 export const HomePage = () => {
   return (
@@ -20,6 +20,15 @@ export const HomePage = () => {
           <List.Item>GPT-4モデルに対応予定（API許可が下り次第）</List.Item>
         </List>
       </ItemWithTitle>
+
+      <Image
+        maw={500}
+        mb="lg"
+        radius="md"
+        src="/images/app_demo.gif"
+        alt="アプリデモ"
+        caption="アプリ画面"
+      />
 
       <LetsPlayButton />
     </Container>
