@@ -23,7 +23,7 @@ export const PromptHelpMark = () => {
         <Text size="sm">
           AIに質問する際の事前指示を作成、管理します。
           <br />
-          例「コードで説明が必要な時はPythonを使ってください（コードブロックは色付きで）」
+          例「コード例を示す時はPythonを使って」
         </Text>
       </Popover.Dropdown>
     </Popover>

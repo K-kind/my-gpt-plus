@@ -7,9 +7,10 @@ type Props = {
     content: string,
     setContent: (content: string) => void
   ) => void;
+  isOverMax?: boolean;
 };
 
-export const NewMessageForm = ({ handleSubmit }: Props) => {
+export const NewMessageForm = ({ handleSubmit, isOverMax }: Props) => {
   const [content, setContent] = useState("");
 
   const onClick = useCallback(() => {
@@ -34,11 +35,19 @@ export const NewMessageForm = ({ handleSubmit }: Props) => {
           minRows={2}
           maxRows={6}
           sx={{ flex: 1 }}
-          placeholder="質問してください"
+          disabled={isOverMax}
+          placeholder={
+            isOverMax ? "これ以上は質問できません" : "質問してください"
+          }
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={onKeyDown}
         />
-        <Button radius="xl" px="xs" onClick={onClick} disabled={!content}>
+        <Button
+          radius="xl"
+          px="xs"
+          onClick={onClick}
+          disabled={!content || isOverMax}
+        >
           <IconSend />
         </Button>
       </Flex>

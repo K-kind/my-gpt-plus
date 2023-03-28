@@ -1,5 +1,9 @@
 import { NotificationProps, notifications } from "@mantine/notifications";
-import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconExclamationMark,
+  IconInfoSmall,
+} from "@tabler/icons-react";
 
 type OptionsForSuccess = {
   title?: string;
@@ -44,8 +48,20 @@ export const useNotification = () => {
     });
   };
 
+  const notifyInfo = ({ title, message, options = {} }: OptionsForSuccess) => {
+    notifications.show({
+      title,
+      message,
+      icon: <IconInfoSmall size={18} />,
+      color: "blue",
+      styles: { icon: { height: 24, width: 24 } },
+      ...options,
+    });
+  };
+
   return {
     notifySuccess,
     notifyError,
+    notifyInfo,
   };
 };

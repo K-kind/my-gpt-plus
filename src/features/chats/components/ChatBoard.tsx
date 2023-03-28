@@ -16,6 +16,8 @@ import { useCreateMessage } from "@/features/messages/hooks/useCreateMessage";
 import { Message } from "@/features/messages/types/message";
 import { useNotification } from "@/shared/hooks/useNotification";
 
+const MAX_MESSAGES = 30;
+
 export type ChatBoardHandle = {
   handleSubmit: (
     content: string,
@@ -28,7 +30,7 @@ type Props = {
 };
 
 const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
-  const { notifyError } = useNotification();
+  const { notifyError, notifyInfo } = useNotification();
   const messageListByChatIdQuery = useMessageListByChatId({
     chatId: chat.id,
   });
@@ -45,6 +47,17 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
     });
   }, []);
 
+  const warnTooManyMessages = useCallback(() => {
+    const warnLengths = [10, 14, 18, 22, 26];
+    if (!warnLengths.includes(messageListByChatIdQuery.data!.length)) return;
+
+    notifyInfo({
+      title: "開発者からのお願い",
+      message: "1つのチャット内のやり取りはなるべく少なくしてください",
+      options: { autoClose: 6000 },
+    });
+  }, [messageListByChatIdQuery.data, notifyInfo]);
+
   const handleSubmit = useCallback(
     async (content: string, setContent: (content: string) => void) => {
       const userMessage = await createMessageMutation.mutateAsync({
@@ -54,6 +67,8 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
       });
       setContent("");
       scrollToBottom();
+
+      warnTooManyMessages();
 
       const promptMessages = chat.prompts.map((prompt) => {
         return { role: "system", content: prompt.content } as const;
@@ -98,6 +113,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
       notifyError,
       scrollToBottom,
       streamChatCompletionMutation,
+      warnTooManyMessages,
     ]
   );
 
@@ -154,7 +170,10 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
         />
       </ScrollArea>
       <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" py="md">
-        <NewMessageForm handleSubmit={handleSubmit} />
+        <NewMessageForm
+          handleSubmit={handleSubmit}
+          isOverMax={messageListByChatIdQuery.data!.length > MAX_MESSAGES}
+        />
       </Box>
     </Box>
   );
