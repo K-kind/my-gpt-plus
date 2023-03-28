@@ -126,7 +126,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
     if (streamChatCompletionMutation.content == undefined) {
       return persistedMessages;
     }
-    if (persistedMessages[0]?.role === "user") {
+    if (persistedMessages[persistedMessages.length - 1]?.role === "user") {
       return [
         ...persistedMessages,
         {
