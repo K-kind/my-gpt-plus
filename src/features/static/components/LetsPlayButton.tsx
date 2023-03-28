@@ -33,7 +33,11 @@ export const LetsPlayButton = () => {
   };
 
   return (
-    <Button onClick={onClickPlay} loading={anonSignInMutation.isLoading}>
+    <Button
+      size="md"
+      onClick={onClickPlay}
+      loading={anonSignInMutation.isLoading}
+    >
       試してみる
     </Button>
   );

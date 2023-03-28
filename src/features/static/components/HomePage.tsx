@@ -1,6 +1,6 @@
 import { LetsPlayButton } from "@/features/static/components/LetsPlayButton";
 import { ItemWithTitle } from "@/shared/components/ItemWithTitle";
-import { Container, Image, List } from "@mantine/core";
+import { Card, Container, Image, List } from "@mantine/core";
 
 export const HomePage = () => {
   return (
@@ -9,7 +9,9 @@ export const HomePage = () => {
         <p>
           このサイトは、ChatGPTを少しだけ便利にしたWebアプリです。
           <br />
-          無料で、ログインなしでもご利用いただけます。（※個人開発のため、都合により回数制限などを導入する可能性があります）
+          無料で、ログインなしでもご利用いただけます。
+          <br />
+          （※個人開発のため、回数制限導入や、場合によりサービス終了の可能性があります）
         </p>
       </ItemWithTitle>
 
@@ -17,18 +19,15 @@ export const HomePage = () => {
         <List>
           <List.Item>質問の事前指示のセット・管理ができる</List.Item>
           <List.Item>チャット履歴を確認できる</List.Item>
-          <List.Item>GPT-4モデルに対応予定（API許可が下り次第）</List.Item>
+          <List.Item>高速なGPT-3.5（Turbo）モデルを使用</List.Item>
         </List>
       </ItemWithTitle>
 
-      <Image
-        maw={500}
-        mb="lg"
-        radius="md"
-        src="/images/app_demo.gif"
-        alt="アプリデモ"
-        caption="アプリ画面"
-      />
+      <ItemWithTitle title="アプリ画面">
+        <Card withBorder maw={500}>
+          <Image radius="md" src="/images/app_demo.gif" alt="アプリデモ" />
+        </Card>
+      </ItemWithTitle>
 
       <LetsPlayButton />
     </Container>
