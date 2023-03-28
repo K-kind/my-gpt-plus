@@ -5,6 +5,7 @@ import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/features/auth/providers/auth";
+import { AppHead } from "@/shared/components/AppHead";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -26,7 +27,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, []);
 
   // SSRは不要なため
-  if (!mounted) return null;
+  if (!mounted) return <AppHead />;
 
   const getLayout = Component.getLayout || ((page) => page);
   return (
