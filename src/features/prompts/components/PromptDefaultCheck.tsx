@@ -13,7 +13,6 @@ export const PromptDefaultCheck = ({ prompt }: Props) => {
   const updatePromptMutation = useUpdatePrompt({ id: prompt.id });
 
   const handleChange = useCallback(async () => {
-    console.log("aaa");
     try {
       await updatePromptMutation.mutateAsync({ isDefault: !prompt.isDefault });
       notifySuccess({ message: "保存しました" });
