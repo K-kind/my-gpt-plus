@@ -35,10 +35,13 @@ export const ChatList = () => {
   // 最初のページかどうかが分かるようにしなければ、戻ってきた時に前へを表示してしまう
   // onSuccessでやるとstate変更が反映されなかったため、useEffect
   useEffect(() => {
-    if (firstChatId == undefined) {
+    if (
+      firstChatId == undefined ||
+      (pageState.after == undefined && pageState.before == undefined)
+    ) {
       setFirstChatId(chats[0]?.id);
     }
-  }, [chats, firstChatId]);
+  }, [chats, firstChatId, pageState.after, pageState.before]);
 
   const handlePrev = () => {
     if (chats.length > 0) {
