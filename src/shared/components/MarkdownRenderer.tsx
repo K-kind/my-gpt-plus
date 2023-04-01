@@ -29,5 +29,6 @@ const StyledWrapper = styled("div")`
   }
   p {
     line-height: 28px;
+    white-space: pre-wrap;
   }
 `;
