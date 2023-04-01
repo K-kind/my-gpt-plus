@@ -21,7 +21,7 @@ const MAX_MESSAGES = 30;
 export type ChatBoardHandle = {
   handleSubmit: (
     content: string,
-    setContent: (content: string) => void
+    setContent?: (content: string) => void
   ) => Promise<void>;
 };
 
@@ -59,13 +59,13 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
   }, [messageListByChatIdQuery.data, notifyInfo]);
 
   const handleSubmit = useCallback(
-    async (content: string, setContent: (content: string) => void) => {
+    async (content: string, setContent?: (content: string) => void) => {
       const userMessage = await createMessageMutation.mutateAsync({
         chatId: chat.id,
         role: "user",
         content,
       });
-      setContent("");
+      setContent?.("");
       scrollToBottom();
 
       warnTooManyMessages();
@@ -173,6 +173,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
         <NewMessageForm
           handleSubmit={handleSubmit}
           isOverMax={messageListByChatIdQuery.data!.length > MAX_MESSAGES}
+          isGenerationg={streamChatCompletionMutation.isLoading}
         />
       </Box>
     </Box>

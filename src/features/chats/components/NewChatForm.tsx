@@ -18,7 +18,7 @@ export type HandleSubmitParams = {
 };
 
 type Props = {
-  handleSubmit: (params: HandleSubmitParams) => void;
+  handleSubmit: (params: HandleSubmitParams) => Promise<void>;
 };
 
 const modelOptions = Object.values(ASSIGNABLE_MODEL).map((model) => ({
@@ -42,7 +42,7 @@ export const NewChatForm = ({ handleSubmit }: Props) => {
 
   const emitSubmit = useCallback(
     (content: string, setContent: (content: string) => void) => {
-      handleSubmit({
+      return handleSubmit({
         model,
         prompts: selectedPromptIds.map(
           (id) => promptListQuery.data!.find((prompt) => prompt.id === id)!

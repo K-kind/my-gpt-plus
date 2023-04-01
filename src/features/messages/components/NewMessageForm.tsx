@@ -6,24 +6,41 @@ type Props = {
   handleSubmit: (
     content: string,
     setContent: (content: string) => void
-  ) => void;
+  ) => Promise<void>;
   isOverMax?: boolean;
+  isGenerationg?: boolean;
 };
 
-export const NewMessageForm = ({ handleSubmit, isOverMax }: Props) => {
+export const NewMessageForm = ({
+  handleSubmit,
+  isOverMax,
+  isGenerationg,
+}: Props) => {
   const [content, setContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const submitIsDisabled = !content || isOverMax || isLoading || isGenerationg;
 
   const onClick = useCallback(() => {
-    handleSubmit(content, setContent);
+    setIsLoading(true);
+    handleSubmit(content, setContent).finally(() => {
+      setIsLoading(false);
+    });
   }, [content, handleSubmit]);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLTextAreaElement>) => {
       if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-        handleSubmit(content, setContent);
+        event.preventDefault();
+        if (submitIsDisabled) return;
+
+        setIsLoading(true);
+        handleSubmit(content, setContent).finally(() => {
+          setIsLoading(false);
+        });
       }
     },
-    [content, handleSubmit]
+    [content, handleSubmit, submitIsDisabled]
   );
 
   return (
@@ -46,7 +63,7 @@ export const NewMessageForm = ({ handleSubmit, isOverMax }: Props) => {
           radius="xl"
           px="xs"
           onClick={onClick}
-          disabled={!content || isOverMax}
+          disabled={submitIsDisabled}
         >
           <IconSend />
         </Button>
