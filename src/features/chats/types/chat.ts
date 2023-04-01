@@ -10,10 +10,12 @@ export type Chat = {
   id: string;
   userId: string;
   model: AssignableModel;
-  prompts: { id: string; title: string; content: string }[];
+  prompts: ChatPrompt[];
   title: string;
   createdAt: Date;
 };
+
+export type ChatPrompt = { id: string; title: string; content: string };
 
 export const MODEL_INFO = {
   [ASSIGNABLE_MODEL.THREE_TURBO]: {

@@ -15,6 +15,7 @@ import { useStreamChatCompletion } from "@/features/completion/hooks/useStreamCh
 import { useCreateMessage } from "@/features/messages/hooks/useCreateMessage";
 import { Message } from "@/features/messages/types/message";
 import { useNotification } from "@/shared/hooks/useNotification";
+import { ChatPromptBadge } from "@/features/chats/components/ChatPromptBadge";
 
 const MAX_MESSAGES = 30;
 
@@ -165,9 +166,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
           {chat.prompts.length > 0 && (
             <Flex align="center" ml="xs" gap="xs" wrap="wrap">
               {chat.prompts.map((prompt) => (
-                <Badge key={prompt.id} size="lg" variant="outline">
-                  {prompt.title}
-                </Badge>
+                <ChatPromptBadge key={prompt.id} chatPrompt={prompt} />
               ))}
             </Flex>
           )}
