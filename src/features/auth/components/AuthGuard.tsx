@@ -1,26 +1,43 @@
+import { getUser } from "@/features/auth/api/getUser";
 import { AuthContext } from "@/features/auth/providers/auth";
 import { useRouter } from "next/router";
-import { ReactNode, useContext, useEffect } from "react";
+import { ReactNode, useContext, useEffect, useMemo } from "react";
 
 type Props = {
   children: ReactNode;
 };
 
-const AUTHORIZED_PATHS = ["/chats", "/chats/[id]", "/chats/new"] as const;
+const AUTHORIZED_PATHS = [
+  "/chats",
+  "/chats/[id]",
+  "/chats/new",
+  "/signup",
+] as const;
 
 export const AuthGuard = ({ children }: Props) => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const router = useRouter();
 
+  const isAuthorizedPath = useMemo(
+    () => (AUTHORIZED_PATHS as ReadonlyArray<string>).includes(router.asPath),
+    [router.asPath]
+  );
+
+  // ユーザー初期化
+  useEffect(() => {
+    getUser().then((u) => setUser(u));
+  }, [setUser]);
+
+  // ログイン必須パスのredirect制御
   useEffect(() => {
     if (user !== null) return;
-    if (!(AUTHORIZED_PATHS as ReadonlyArray<string>).includes(router.asPath))
-      return;
+    if (!isAuthorizedPath) return;
 
     router.push("/");
-  }, [router, user]);
+  }, [isAuthorizedPath, router, user]);
 
-  if (user == null) return null;
+  if (user === undefined) return null;
+  if (isAuthorizedPath && user == null) return null;
 
   return <>{children}</>;
 };

@@ -1,4 +1,3 @@
-import { useSetAuth } from "@/features/auth/hooks/useSetAuth";
 import { ContentLoader } from "@/shared/components/ContentLoader";
 import { APP_NAME } from "@/shared/contants";
 import { AppShell, Container, Flex, Header, Text } from "@mantine/core";
@@ -10,7 +9,6 @@ type Props = {
 };
 
 export const SimpleLayout = ({ children }: Props) => {
-  useSetAuth();
   return (
     <AppShell
       header={

@@ -1,5 +1,3 @@
-import { AuthGuard } from "@/features/auth/components/AuthGuard";
-import { useSetAuth } from "@/features/auth/hooks/useSetAuth";
 import { AppNavbar } from "@/shared/components/AppNavbar";
 import { AppSpHeader } from "@/shared/components/AppSpHeader";
 import { ContentLoader } from "@/shared/components/ContentLoader";
@@ -12,7 +10,6 @@ type Props = {
 };
 
 export const AppLayout = ({ children }: Props) => {
-  useSetAuth();
   const router = useRouter();
   const [spNavbarOpened, setSpNavbarOpened] = useState(false);
 
@@ -28,19 +25,17 @@ export const AppLayout = ({ children }: Props) => {
   }, [closeSpNavBar, router.events]);
 
   return (
-    <AuthGuard>
-      <AppShell
-        header={
-          <AppSpHeader
-            spNavbarOpened={spNavbarOpened}
-            setSpNavbarOpened={setSpNavbarOpened}
-          />
-        }
-        navbar={<AppNavbar spNavbarOpened={spNavbarOpened} />}
-        padding={0}
-      >
-        <Suspense fallback={<ContentLoader />}>{children}</Suspense>
-      </AppShell>
-    </AuthGuard>
+    <AppShell
+      header={
+        <AppSpHeader
+          spNavbarOpened={spNavbarOpened}
+          setSpNavbarOpened={setSpNavbarOpened}
+        />
+      }
+      navbar={<AppNavbar spNavbarOpened={spNavbarOpened} />}
+      padding={0}
+    >
+      <Suspense fallback={<ContentLoader />}>{children}</Suspense>
+    </AppShell>
   );
 };
