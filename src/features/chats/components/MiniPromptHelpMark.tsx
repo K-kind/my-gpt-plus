@@ -21,7 +21,7 @@ export const MiniPromptHelpMark = () => {
       </Popover.Target>
       <Popover.Dropdown sx={{ pointerEvents: "none" }}>
         <Text size="sm">
-          「コード例を示す時はPythonを使って」のような指示を設定します。
+          「Step By Stepで考えて」のような指示を設定します。
           <br />
           「事前指示管理」で作成可能です。
         </Text>
