@@ -36,6 +36,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
   });
 
   const viewport = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
+  const viewportHeight = useRef(0);
 
   const createMessageMutation = useCreateMessage();
   const streamChatCompletionMutation = useStreamChatCompletion();
@@ -87,6 +88,13 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
               ...promptMessages,
               ...messages.map((m) => ({ role: m.role, content: m.content })),
             ],
+          },
+          onGetToken: () => {
+            const currentHeight = viewport.current.scrollHeight;
+            if (viewportHeight.current !== currentHeight) {
+              viewportHeight.current = currentHeight;
+              scrollToBottom();
+            }
           },
           onSuccess: async (content) => {
             await createMessageMutation.mutateAsync({

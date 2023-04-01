@@ -6,14 +6,15 @@ import { useState } from "react";
 
 type StartOptions = {
   params: StreamChatDTO["params"];
-  onSuccess: (content: string) => void;
+  onGetToken?: (token: string) => void;
+  onSuccess?: (content: string) => void;
 };
 
 export const useStreamChatCompletion = () => {
   const [content, setContent] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const start = async ({ params, onSuccess }: StartOptions) => {
+  const start = async ({ params, onGetToken, onSuccess }: StartOptions) => {
     setIsLoading(true);
 
     let currentContent = "";
@@ -22,8 +23,9 @@ export const useStreamChatCompletion = () => {
       for await (let token of generator) {
         currentContent = currentContent + token;
         setContent(currentContent);
+        onGetToken?.(token);
       }
-      onSuccess(currentContent);
+      onSuccess?.(currentContent);
     } finally {
       setIsLoading(false);
     }
