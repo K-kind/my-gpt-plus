@@ -13,12 +13,21 @@ import { NavChatList } from "@/shared/components/NavChatList";
 import { Suspense } from "react";
 import { ContentLoader } from "@/shared/components/ContentLoader";
 
-export const AppNavbar = () => {
+type Props = {
+  spNavbarOpened: boolean;
+};
+
+export const AppNavbar = ({ spNavbarOpened }: Props) => {
   const router = useRouter();
   const pageId = router.query.id as string | undefined;
 
   return (
-    <Navbar width={{ base: 300 }} p="xs">
+    <Navbar
+      width={{ sm: 240, md: 300 }}
+      p="xs"
+      hiddenBreakpoint="sm"
+      hidden={!spNavbarOpened}
+    >
       <Navbar.Section mb={4}>
         <Link href="/chats/new" style={{ textDecoration: "none" }}>
           <Button

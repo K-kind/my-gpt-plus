@@ -4,7 +4,7 @@ import { Card, Container, Image, List } from "@mantine/core";
 
 export const HomePage = () => {
   return (
-    <Container>
+    <Container pb="xl">
       <ItemWithTitle title="このサイトについて">
         <p>
           このサイトは、ChatGPTを少しだけ便利にしたWebアプリです。

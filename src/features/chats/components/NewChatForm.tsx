@@ -91,7 +91,13 @@ export const NewChatForm = ({ handleSubmit }: Props) => {
           onChange={setSelectedPromptIds}
         />
       </Flex>
-      <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" py="md">
+      <Box
+        sx={{ position: "absolute", bottom: 0 }}
+        w="100%"
+        px="sm"
+        py="md"
+        bg="white"
+      >
         <NewMessageForm handleSubmit={emitSubmit} />
       </Box>
     </Box>

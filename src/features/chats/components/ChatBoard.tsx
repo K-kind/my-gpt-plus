@@ -169,7 +169,13 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
           isGenerationg={streamChatCompletionMutation.isLoading}
         />
       </ScrollArea>
-      <Box sx={{ position: "absolute", bottom: 0 }} w="100%" px="sm" py="md">
+      <Box
+        sx={{ position: "absolute", bottom: 0 }}
+        w="100%"
+        px="sm"
+        py="md"
+        bg="white"
+      >
         <NewMessageForm
           handleSubmit={handleSubmit}
           isOverMax={messageListByChatIdQuery.data!.length > MAX_MESSAGES}
