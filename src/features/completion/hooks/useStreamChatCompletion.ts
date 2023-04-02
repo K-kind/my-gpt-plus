@@ -1,4 +1,6 @@
 import {
+  CompletionError,
+  ErrorCode,
   streamChatCompletion,
   StreamChatDTO,
 } from "@/features/completion/api/streamChatCompletion";
@@ -8,13 +10,19 @@ type StartOptions = {
   params: StreamChatDTO["params"];
   onGetToken?: (token: string) => void;
   onSuccess?: (content: string) => void;
+  onError?: (errorCode: ErrorCode | undefined) => void;
 };
 
 export const useStreamChatCompletion = () => {
   const [content, setContent] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const start = async ({ params, onGetToken, onSuccess }: StartOptions) => {
+  const start = async ({
+    params,
+    onGetToken,
+    onSuccess,
+    onError,
+  }: StartOptions) => {
     setIsLoading(true);
 
     let currentContent = "";
@@ -26,6 +34,8 @@ export const useStreamChatCompletion = () => {
         onGetToken?.(token);
       }
       onSuccess?.(currentContent);
+    } catch (e) {
+      onError?.(e instanceof CompletionError ? e.errorCode : undefined);
     } finally {
       setIsLoading(false);
     }

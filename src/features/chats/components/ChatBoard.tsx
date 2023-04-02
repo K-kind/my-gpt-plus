@@ -81,37 +81,41 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
         ? currentMessages
         : [...currentMessages, userMessage];
 
-      await streamChatCompletionMutation
-        .start({
-          params: {
-            model: chat.model,
-            messages: [
-              ...promptMessages,
-              ...messages.map((m) => ({ role: m.role, content: m.content })),
-            ],
-          },
-          onGetToken: () => {
-            const currentHeight = viewport.current.scrollHeight;
-            if (viewportHeight.current !== currentHeight) {
-              viewportHeight.current = currentHeight;
-              scrollToBottom();
-            }
-          },
-          onSuccess: async (content) => {
-            await createMessageMutation.mutateAsync({
-              chatId: chat.id,
-              role: "assistant",
-              content,
-            });
-            streamChatCompletionMutation.setContent(undefined);
-          },
-        })
-        .catch((e) => {
+      await streamChatCompletionMutation.start({
+        params: {
+          model: chat.model,
+          messages: [
+            ...promptMessages,
+            ...messages.map((m) => ({ role: m.role, content: m.content })),
+          ],
+        },
+        onGetToken: () => {
+          const currentHeight = viewport.current.scrollHeight;
+          if (viewportHeight.current !== currentHeight) {
+            viewportHeight.current = currentHeight;
+            scrollToBottom();
+          }
+        },
+        onSuccess: async (content) => {
+          await createMessageMutation.mutateAsync({
+            chatId: chat.id,
+            role: "assistant",
+            content,
+          });
+          streamChatCompletionMutation.setContent(undefined);
+        },
+        onError: (errorCode) => {
+          const message =
+            errorCode === "context_length_exceeded"
+              ? "トークン数上限に達しました"
+              : "エラーが発生しました";
+
           notifyError({
-            message: "エラーが発生しました",
+            message,
             options: { autoClose: false },
           });
-        });
+        },
+      });
     },
     [
       chat.id,

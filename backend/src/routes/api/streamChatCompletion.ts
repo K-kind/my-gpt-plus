@@ -1,5 +1,5 @@
 import express from "express";
-import { streamChatCompletion, validateParams } from "../../lib/openai";
+import { ErrorCode, parseError, streamChatCompletion, validateParams } from "../../lib/openai";
 
 const router = express.Router();
 
@@ -10,7 +10,8 @@ router.post("/", async (req: express.Request, res: express.Response) => {
 
   const params = validateParams(req.body);
   if (params == null) {
-    return res.status(400).send({ message: "Invalid argument" });
+    const errorCode: ErrorCode = "invalid_argument"
+    return res.status(400).send({ errorCode });
   }
 
   try {
@@ -18,7 +19,10 @@ router.post("/", async (req: express.Request, res: express.Response) => {
       res.write(data);
     }
   } catch (e) {
-    return res.status(500).send({ message: "Internal server error" });
+    const { status, errorCode } = parseError(e)
+    if (status !== 400) { console.error(e) }
+
+    return res.status(status).send({ errorCode });
   }
   res.end();
 });

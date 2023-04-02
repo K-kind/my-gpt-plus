@@ -62,3 +62,26 @@ export const validateParams = (data: unknown) => {
     model: obj.model as RequestParams["model"],
   };
 };
+
+export const ERROR_CODES = [
+  "invalid_argument",
+  "internal_server_error",
+  // 以下OpenAIのエラーコード
+  /** トークンが長すぎる */
+  "context_length_exceeded",
+] as const
+
+export type ErrorCode = typeof ERROR_CODES[number]
+
+export const parseError = (e: any): { status: number; errorCode: ErrorCode } => {
+  try {
+    const errorChunks = e.response.data as unknown as IncomingMessage;
+    const chunk = errorChunks.read()
+    const line = chunk.toString("utf8")
+    const json = JSON.parse(line);
+    return { status: 400, errorCode: json.error.code as ErrorCode }
+  } catch (e) {
+    console.error(e)
+    return { status: 500, errorCode: "internal_server_error" }
+  }
+}

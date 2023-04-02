@@ -19,8 +19,13 @@ export async function* streamChatCompletion({ params }: StreamChatDTO) {
 
   const reader = completion.body?.getReader();
 
-  if (completion.status !== 200 || !reader) {
+  if (!reader) {
     throw new Error("Request failed");
+  }
+
+  if (completion.status !== 200) {
+    const { errorCode } = await parseError(reader);
+    throw new CompletionError(completion.status, errorCode);
   }
 
   const decoder = new TextDecoder("utf-8");
@@ -34,5 +39,36 @@ export async function* streamChatCompletion({ params }: StreamChatDTO) {
       const token = decoder.decode(value, { stream: true });
       yield token;
     }
+  }
+}
+
+const parseError = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>
+): Promise<{ errorCode?: ErrorCode }> => {
+  const decoder = new TextDecoder("utf-8");
+
+  try {
+    const { value } = await reader.read();
+    const data = decoder.decode(value, { stream: true });
+    const json = JSON.parse(data);
+    return { errorCode: json.errorCode as ErrorCode };
+  } catch (e) {
+    return {};
+  }
+};
+
+export const ERROR_CODES = [
+  "invalid_argument",
+  "internal_server_error",
+  // 以下OpenAIのエラーコード
+  /** トークンが長すぎる */
+  "context_length_exceeded",
+] as const;
+
+export type ErrorCode = typeof ERROR_CODES[number];
+
+export class CompletionError extends Error {
+  constructor(public statusCode: number, public errorCode?: ErrorCode) {
+    super();
   }
 }
