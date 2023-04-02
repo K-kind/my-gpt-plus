@@ -13,7 +13,11 @@ export const updateESChat = functions
 
     try {
       if (!change.after.exists) {
-        await esClient.delete({ index: CHATS_INDEX, id: chatId });
+        await esClient.delete({
+          index: CHATS_INDEX,
+          id: chatId,
+          refresh: true,
+        });
         return;
       }
 
@@ -42,6 +46,7 @@ export const updateESChat = functions
         index: CHATS_INDEX,
         id: chatId,
         document: newEsChat,
+        refresh: true,
       });
     } catch (e) {
       functions.logger.error(e);
