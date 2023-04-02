@@ -1,4 +1,4 @@
-import { SignupForm } from "@/features/auth/components/SignupForm";
+import { SignUpForm } from "@/features/auth/components/SignUpForm";
 import { ItemWithTitle } from "@/shared/components/ItemWithTitle";
 import { Box, Container, Flex } from "@mantine/core";
 
@@ -6,7 +6,7 @@ export const SignUpPage = () => {
   return (
     <Container pt={48} pb="xl">
       <Flex justify="center" mb={40}>
-        <SignupForm />
+        <SignUpForm />
       </Flex>
       <ItemWithTitle>
         <Box sx={{ textAlign: "center" }}>
