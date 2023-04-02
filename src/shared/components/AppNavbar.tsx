@@ -19,6 +19,7 @@ import { Suspense, useContext } from "react";
 import { ContentLoader } from "@/shared/components/ContentLoader";
 import { AuthContext } from "@/features/auth/providers/auth";
 import { SignOutNavLink } from "@/shared/components/SignOutNavLink";
+import { AnonSignOutNavLink } from "@/shared/components/AnonSignOutNavLink";
 
 type Props = {
   spNavbarOpened: boolean;
@@ -55,13 +56,13 @@ export const AppNavbar = ({ spNavbarOpened }: Props) => {
           </Button>
         </Link>
       </Navbar.Section>
-      <Navbar.Section grow component={ScrollArea} mah="50%">
+      <Navbar.Section grow component={ScrollArea}>
         <Suspense fallback={<ContentLoader />}>
           <NavChatList pageId={pageId} />
         </Suspense>
       </Navbar.Section>
       <Divider my="xs" />
-      <Navbar.Section>
+      <Navbar.Section grow component={ScrollArea} mah="30%">
         <NavLink
           label="チャット履歴"
           component={Link}
@@ -76,7 +77,7 @@ export const AppNavbar = ({ spNavbarOpened }: Props) => {
           href={"/prompts"}
           icon={<IconAdjustments size="1rem" stroke={1.5} />}
         />
-        {user!.isAnonymous ? (
+        {user!.isAnonymous && (
           <NavLink
             label="アカウント登録"
             component={Link}
@@ -84,9 +85,8 @@ export const AppNavbar = ({ spNavbarOpened }: Props) => {
             href={"/signup"}
             icon={<IconUser size="1rem" stroke={1.5} />}
           />
-        ) : (
-          <SignOutNavLink />
         )}
+        {user!.isAnonymous ? <AnonSignOutNavLink /> : <SignOutNavLink />}
       </Navbar.Section>
     </Navbar>
   );
