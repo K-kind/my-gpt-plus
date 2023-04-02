@@ -7,11 +7,17 @@ import {
   Divider,
 } from "@mantine/core";
 import Link from "next/link";
-import { IconAdjustments, IconList, IconPlus } from "@tabler/icons-react";
+import {
+  IconAdjustments,
+  IconList,
+  IconPlus,
+  IconUser,
+} from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { NavChatList } from "@/shared/components/NavChatList";
-import { Suspense } from "react";
+import { Suspense, useContext } from "react";
 import { ContentLoader } from "@/shared/components/ContentLoader";
+import { AuthContext } from "@/features/auth/providers/auth";
 
 type Props = {
   spNavbarOpened: boolean;
@@ -20,6 +26,7 @@ type Props = {
 export const AppNavbar = ({ spNavbarOpened }: Props) => {
   const router = useRouter();
   const pageId = router.query.id as string | undefined;
+  const { user } = useContext(AuthContext);
 
   return (
     <Navbar
@@ -68,6 +75,15 @@ export const AppNavbar = ({ spNavbarOpened }: Props) => {
           href={"/prompts"}
           icon={<IconAdjustments size="1rem" stroke={1.5} />}
         />
+        {user?.isAnonymous && (
+          <NavLink
+            label="アカウント登録"
+            component={Link}
+            active={router.pathname === "/signup"}
+            href={"/signup"}
+            icon={<IconUser size="1rem" stroke={1.5} />}
+          />
+        )}
       </Navbar.Section>
     </Navbar>
   );
