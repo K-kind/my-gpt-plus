@@ -28,5 +28,6 @@ module.exports = {
     "object-curly-spacing": 0,
     "quote-props": 0,
     "operator-linebreak": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
   },
 };

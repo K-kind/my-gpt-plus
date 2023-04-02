@@ -62,3 +62,9 @@ Firestore初期化（初回のみ）
 ```
 firebase init firestore
 ```
+
+Firebase Functions初期化（初回のみ）
+
+```
+firebase init functions
+```

@@ -1,1 +1,2 @@
-export { createChatCompletion } from "./createChatCompletion";
+export { updateESChat } from "./updateESChat";
+export { updateESMessage } from "./updateESMessage";

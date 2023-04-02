@@ -27,9 +27,17 @@ export const chatBody: IndicesCreateRequest = {
       id: { type: "keyword" },
       userId: { type: "keyword" },
       title: { type: "text", analyzer: "ngram_ja" },
+      prompts: {
+        type: "nested",
+        properties: {
+          title: { type: "text", analyzer: "ngram_ja" },
+          content: { type: "text", analyzer: "ngram_ja" },
+        },
+      },
       messages: {
         type: "nested",
         properties: {
+          id: { type: "keyword" },
           content: { type: "text", analyzer: "ngram_ja" },
         },
       },
