@@ -23,18 +23,17 @@ export const AuthGuard = ({ children }: Props) => {
     [router.asPath]
   );
 
-  // ユーザー初期化
+  // ユーザー初期化 + 最初だけ、ログイン必須パスのredirect制御
   useEffect(() => {
-    getUser().then((u) => setUser(u));
+    getUser().then((u) => {
+      setUser(u);
+      if (u === null && isAuthorizedPath) {
+        router.push("/signin");
+      }
+    });
+    // 最初だけ最初だけ行うため
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setUser]);
-
-  // ログイン必須パスのredirect制御
-  useEffect(() => {
-    if (user !== null) return;
-    if (!isAuthorizedPath) return;
-
-    router.push("/");
-  }, [isAuthorizedPath, router, user]);
 
   if (user === undefined) return null;
   if (isAuthorizedPath && user == null) return null;
