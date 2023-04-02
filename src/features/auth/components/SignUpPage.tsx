@@ -4,7 +4,7 @@ import { Box, Container, Flex } from "@mantine/core";
 
 export const SignUpPage = () => {
   return (
-    <Container py="xl">
+    <Container pt={48} pb="xl">
       <Flex justify="center" mb={40}>
         <SignupForm />
       </Flex>

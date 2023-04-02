@@ -2,7 +2,7 @@ import { SignUpPage } from "@/features/auth/components/SignUpPage";
 import { AuthContext } from "@/features/auth/providers/auth";
 import { NextPageWithLayout } from "@/pages/_app";
 import { AppHead } from "@/shared/components/AppHead";
-import { SimpleLayout } from "@/shared/components/SimpleLayout";
+import { AppLayout } from "@/shared/components/AppLayout";
 import { useRouter } from "next/router";
 import { ReactElement, useContext, useEffect } from "react";
 
@@ -13,6 +13,7 @@ const PagesSignupIndex: NextPageWithLayout = () => {
     if (user!.isAnonymous === false) {
       router.push("/chats/new");
     }
+    // 最初だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
@@ -25,7 +26,7 @@ const PagesSignupIndex: NextPageWithLayout = () => {
 };
 
 PagesSignupIndex.getLayout = (page: ReactElement) => {
-  return <SimpleLayout>{page}</SimpleLayout>;
+  return <AppLayout>{page}</AppLayout>;
 };
 
 export default PagesSignupIndex;
