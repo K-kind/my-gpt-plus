@@ -10,11 +10,19 @@ type Options = GetChatListDTO & {
   config?: QueryConfig<QueryFnType>;
 };
 
-export const chatListQueryKey = (options: GetChatListDTO) => [
+export const chatListQueryKeyWithOptionsBase = [
   "chats",
   "index",
-  { options },
+  "withOptions",
 ];
+
+export const chatListQueryKey = (options?: Omit<GetChatListDTO, "userId">) => {
+  if (options) {
+    return [...chatListQueryKeyWithOptionsBase, { options }];
+  } else {
+    return ["chats", "index"];
+  }
+};
 
 export const useChatList = ({
   config,
@@ -24,8 +32,9 @@ export const useChatList = ({
   const optionsWithUserId = { userId: user!.id, ...options };
 
   return useQuery<ExtractFnReturnType<QueryFnType>>({
-    queryKey: chatListQueryKey(optionsWithUserId),
+    queryKey: chatListQueryKey(options),
     queryFn: () => getChatList(optionsWithUserId),
+    staleTime: 5 * 60 * 1000,
     ...config,
   });
 };

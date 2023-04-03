@@ -15,7 +15,7 @@ export const SignOutNavLink = () => {
   const onClick = useCallback(async () => {
     try {
       await signOutMutation.mutateAsync();
-      await router.push("/");
+      await router.push("/signin");
       notifySuccess({ message: "ログアウトしました" });
       setUser(null);
     } catch (e) {

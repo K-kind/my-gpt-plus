@@ -11,7 +11,7 @@ export const useDeleteChat = () => {
   return useMutation({
     mutationFn: (id: DeleteChatDTO["id"]) => deleteChat({ id }),
     onSuccess: () => {
-      queryClient.invalidateQueries(chatListQueryKey({ userId: user!.id }));
+      queryClient.invalidateQueries(chatListQueryKey());
     },
     // onSuccess: ({ id }) => {
     // queryClient.setQueriesData<Chat[]>(chatListQueryKey(), (chats) => {

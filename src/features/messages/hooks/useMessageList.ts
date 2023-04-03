@@ -22,6 +22,7 @@ export const useMessageListByChatId = ({ chatId, config }: ByChatIdOptions) => {
   return useQuery<ExtractFnReturnType<ByChatIdQueryFnType>>({
     queryKey: messageListByChatIdQueryKey(chatId, { userId: user!.id }),
     queryFn: () => getMessageListByChatId({ chatId, userId: user!.id }),
+    staleTime: 5 * 60 * 1000,
     ...config,
   });
 };

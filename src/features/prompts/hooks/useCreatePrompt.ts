@@ -20,14 +20,11 @@ export const useCreatePrompt = ({ prompts }: Options = {}) => {
     mutationFn: (params: CreatePromptDTO["params"]) =>
       createPrompt({ userId: user!.id, prompts, params }),
     onSuccess: (prompt) => {
-      queryClient.setQueryData<Prompt[]>(
-        promptListQueryKey({ userId: user!.id }),
-        (prompts) => {
-          if (prompts == undefined) return [prompt];
-          if (prompts.some(({ id }) => id === prompt.id)) return prompts;
-          return [...prompts, prompt];
-        }
-      );
+      queryClient.setQueryData<Prompt[]>(promptListQueryKey(), (prompts) => {
+        if (prompts == undefined) return [prompt];
+        if (prompts.some(({ id }) => id === prompt.id)) return prompts;
+        return [...prompts, prompt];
+      });
     },
   });
 };

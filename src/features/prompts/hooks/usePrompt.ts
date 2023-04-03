@@ -15,6 +15,7 @@ export const usePrompt = ({ id, config }: Options) => {
   return useQuery<ExtractFnReturnType<QueryFnType>>({
     queryKey: promptQueryKey(id),
     queryFn: () => getPrompt({ id }),
+    staleTime: 5 * 60 * 1000,
     ...config,
   });
 };

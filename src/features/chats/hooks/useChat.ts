@@ -15,6 +15,7 @@ export const useChat = ({ id, config }: Options) => {
   return useQuery<ExtractFnReturnType<QueryFnType>>({
     queryKey: chatQueryKey(id),
     queryFn: () => getChat({ id }),
+    staleTime: 5 * 60 * 1000,
     ...config,
   });
 };

@@ -13,18 +13,15 @@ type Options = GetPromptListDTO & {
   config?: QueryConfig<QueryFnType>;
 };
 
-export const promptListQueryKey = (options: GetPromptListDTO) => [
-  "prompts",
-  "index",
-  { options },
-];
+export const promptListQueryKey = () => ["prompts", "index"];
 
 export const usePromptList = ({ config }: Omit<Options, "userId"> = {}) => {
   const { user } = useContext(AuthContext);
 
   return useQuery<ExtractFnReturnType<QueryFnType>>({
-    queryKey: promptListQueryKey({ userId: user!.id }),
+    queryKey: promptListQueryKey(),
     queryFn: () => getPromptList({ userId: user!.id }),
+    staleTime: 5 * 60 * 1000,
     ...config,
   });
 };

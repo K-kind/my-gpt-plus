@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createChat, CreateChatDTO } from "@/features/chats/api/createChat";
 import { Chat } from "@/features/chats/types/chat";
-import { chatListQueryKey } from "@/features/chats/hooks/useChatList";
+import {
+  chatListQueryKey,
+  chatListQueryKeyWithOptionsBase,
+} from "@/features/chats/hooks/useChatList";
 import { useContext } from "react";
 import { AuthContext } from "@/features/auth/providers/auth";
 
@@ -13,14 +16,12 @@ export const useCreateChat = () => {
     mutationFn: (params: CreateChatDTO["params"]) =>
       createChat({ userId: user!.id, params }),
     onSuccess: (chat) => {
-      queryClient.setQueryData<Chat[]>(
-        chatListQueryKey({ userId: user!.id }),
-        (chats) => {
-          if (chats == undefined) return [chat];
-          if (chats.some(({ id }) => id === chat.id)) return chats;
-          return [chat, ...chats];
-        }
-      );
+      queryClient.setQueryData<Chat[]>(chatListQueryKey(), (chats) => {
+        if (chats == undefined) return [chat];
+        if (chats.some(({ id }) => id === chat.id)) return chats;
+        return [chat, ...chats];
+      });
+      queryClient.invalidateQueries(chatListQueryKeyWithOptionsBase);
     },
   });
 };
