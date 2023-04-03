@@ -24,7 +24,7 @@ export const createChat = async ({ userId, params }: CreateChatDTO) => {
       title: prompt.title,
       content: prompt.content,
     })),
-    title: params.initialContent.slice(0, 20),
+    title: params.initialContent.slice(0, 22),
     createdAt: serverTimestamp(),
   });
 
