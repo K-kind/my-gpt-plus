@@ -18,7 +18,7 @@ export const HomePage = () => {
       <ItemWithTitle title="独自のメリット">
         <List>
           <List.Item>質問の事前指示のセット・管理ができる</List.Item>
-          <List.Item>チャット履歴を確認できる</List.Item>
+          <List.Item>チャット履歴を確認・検索できる</List.Item>
           <List.Item>高速なGPT-3.5（Turbo）モデルを使用</List.Item>
         </List>
       </ItemWithTitle>

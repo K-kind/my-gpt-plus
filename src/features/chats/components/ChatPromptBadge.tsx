@@ -15,6 +15,7 @@ export const ChatPromptBadge = ({ chatPrompt }: Props) => {
         <Badge
           size="lg"
           variant="outline"
+          sx={{ textTransform: "none" }}
           onMouseEnter={open}
           onMouseLeave={close}
         >
