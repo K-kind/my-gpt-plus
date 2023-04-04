@@ -1,9 +1,10 @@
 import { Chat } from "@/features/chats/types/chat";
-import { Badge, Box, Flex, ScrollArea, Text } from "@mantine/core";
+import { Box, Flex, ScrollArea, Text } from "@mantine/core";
 import {
   forwardRef,
   useCallback,
   useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useRef,
 } from "react";
@@ -37,7 +38,8 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
   });
 
   const viewport = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
-  const viewportHeight = useRef(0);
+  const scrollBottomRef = useRef<HTMLDivElement>(null);
+  const viewportScrollTop = useRef(0);
 
   const createMessageMutation = useCreateMessage();
   const streamChatCompletionMutation = useStreamChatCompletion();
@@ -88,13 +90,6 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
             ...promptMessages,
             ...messages.map((m) => ({ role: m.role, content: m.content })),
           ],
-        },
-        onGetToken: () => {
-          const currentHeight = viewport.current.scrollHeight;
-          if (viewportHeight.current !== currentHeight) {
-            viewportHeight.current = currentHeight;
-            scrollToBottom();
-          }
         },
         onSuccess: async (content) => {
           await createMessageMutation.mutateAsync({
@@ -152,6 +147,17 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
     return persistedMessages;
   }, [messageListByChatIdQuery.data, streamChatCompletionMutation.content]);
 
+  // 自動で下までスクロール
+  useLayoutEffect(() => {
+    // 前回の位置よりユーザーが動かしている
+    if (viewportScrollTop.current > viewport.current.scrollTop + 1) {
+      return;
+    }
+
+    scrollBottomRef?.current?.scrollIntoView();
+    viewportScrollTop.current = viewport.current.scrollTop;
+  }, [messages]);
+
   return (
     <Box sx={{ position: "relative" }} h="100%">
       <ScrollArea h="calc(100vh - 98px)" viewportRef={viewport}>
@@ -179,6 +185,7 @@ const ChatBoard = forwardRef<ChatBoardHandle, Props>(({ chat }: Props, ref) => {
           messages={messages}
           isGenerationg={streamChatCompletionMutation.isLoading}
         />
+        <div ref={scrollBottomRef}></div>
       </ScrollArea>
       <Box
         sx={{ position: "absolute", bottom: 0 }}

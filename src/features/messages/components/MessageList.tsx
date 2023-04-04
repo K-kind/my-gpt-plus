@@ -9,16 +9,23 @@ type Props = {
 
 export const MessageList = ({ messages, isGenerationg }: Props) => {
   return (
-    <Box pb={120}>
+    <Box pb={100} sx={{ position: "relative" }}>
       {messages.map((message) => (
         <MessageItem key={message.id} message={message} />
       ))}
       {isGenerationg && (
-        <Flex justify="center" pt="md">
+        <Box
+          pt="md"
+          sx={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <Text color="gray.6" fz="sm">
             生成中...
           </Text>
-        </Flex>
+        </Box>
       )}
     </Box>
   );
