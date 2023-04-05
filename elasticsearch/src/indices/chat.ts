@@ -21,6 +21,7 @@ export const chatBody: IndicesCreateRequest = {
         },
       },
     },
+    refresh_interval: "60s"
   },
   mappings: {
     properties: {

@@ -11,6 +11,7 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^8.6.0"
+    "@elastic/elasticsearch": "^8.6.0",
+    "dotenv": "^16.0.3"
   }
 }

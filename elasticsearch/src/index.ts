@@ -1,13 +1,16 @@
 // indicesを作成する
 import { Client } from "@elastic/elasticsearch";
 import { chatBody } from "./indices/chat";
+import { config } from "dotenv"
+
+config()
 
 const client = new Client({
-  node: "http://localhost:9200",
+  node: process.env.ELASTIC_NODE!,
   auth: {
-    username: 'elastic',
-    password: 'password'
-  }
+    username: process.env.ELASTIC_USER_NAME!,
+    password: process.env.ELASTIC_PASSWORD!,
+  },
 });
 
 const makeElastic = async () => {
