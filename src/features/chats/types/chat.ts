@@ -1,10 +1,10 @@
 export const ASSIGNABLE_MODEL = {
   THREE_TURBO: "gpt-3.5-turbo",
-  // FOUR: "gpt-4",
+  FOUR: "gpt-4",
 } as const;
 
 export type AssignableModel =
-  typeof ASSIGNABLE_MODEL[keyof typeof ASSIGNABLE_MODEL];
+  (typeof ASSIGNABLE_MODEL)[keyof typeof ASSIGNABLE_MODEL];
 
 export type Chat = {
   id: string;
@@ -22,10 +22,10 @@ export const MODEL_INFO = {
     name: "GPT-3.5",
     detailName: "GPT-3.5 (Turbo)",
   },
-  // [ASSIGNABLE_MODEL.FOUR]: {
-  //   name: "GPT-4",
-  //   detailName: "GPT-4"
-  // },
+  [ASSIGNABLE_MODEL.FOUR]: {
+    name: "GPT-4",
+    detailName: "GPT-4",
+  },
 } as const satisfies {
   [key in AssignableModel]: { name: string; detailName: string };
 };

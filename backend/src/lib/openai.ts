@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import { IncomingMessage } from "http";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 
-config()
+config();
 const API_KEY = process.env.OPEN_AI_API_KEY!;
 const openai = new OpenAIApi(new Configuration({ apiKey: API_KEY }));
 
@@ -46,7 +46,7 @@ export async function* streamChatCompletion(params: RequestParams) {
 
 const ASSIGNABLE_MODEL = {
   THREE_TURBO: "gpt-3.5-turbo",
-  // FOUR: "gpt-4",
+  FOUR: "gpt-4",
 } as const;
 
 export const validateParams = (data: unknown) => {
@@ -69,19 +69,21 @@ export const ERROR_CODES = [
   // 以下OpenAIのエラーコード
   /** トークンが長すぎる */
   "context_length_exceeded",
-] as const
+] as const;
 
-export type ErrorCode = typeof ERROR_CODES[number]
+export type ErrorCode = (typeof ERROR_CODES)[number];
 
-export const parseError = (e: any): { status: number; errorCode: ErrorCode } => {
+export const parseError = (
+  e: any
+): { status: number; errorCode: ErrorCode } => {
   try {
     const errorChunks = e.response.data as unknown as IncomingMessage;
-    const chunk = errorChunks.read()
-    const line = chunk.toString("utf8")
+    const chunk = errorChunks.read();
+    const line = chunk.toString("utf8");
     const json = JSON.parse(line);
-    return { status: 400, errorCode: json.error.code as ErrorCode }
+    return { status: 400, errorCode: json.error.code as ErrorCode };
   } catch (e) {
-    console.error(e)
-    return { status: 500, errorCode: "internal_server_error" }
+    console.error(e);
+    return { status: 500, errorCode: "internal_server_error" };
   }
-}
+};
